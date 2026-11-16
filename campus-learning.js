@@ -16,9 +16,9 @@
     cle:"study languages or humanities"
   };
   const photos = {
-    mcpherson:"UVic McPherson Library.jpg",
-    cle:"UVic Clearihue Building.jpg",
-    ecss:"UVic ECS Building.png"
+    mcpherson:{file:"UVic McPherson Library.jpg", author:"Thedarkempire"},
+    cle:{file:"UVic Clearihue Building.jpg", author:"Tloren5"},
+    ecss:{file:"UVic ECS Building.png", author:"Thedarkempire"}
   };
   let completed = [];
   try {
@@ -130,8 +130,8 @@
     const img=card.querySelector("img");
     const caption=card.querySelector(".clue-caption");
     if(img){
-      const url=photos[b.id];
-      img.src=url?"https://commons.wikimedia.org/wiki/Special:FilePath/"+encodeURIComponent(url)+"?width=540":"assets/campus-map-hd.png";
+      const photo=photos[b.id];
+      img.src=photo?"https://commons.wikimedia.org/wiki/Special:FilePath/"+encodeURIComponent(photo.file)+"?width=540":"assets/campus-map-hd.png";
       img.alt="Campus landmark clue for "+b.name;
       img.onerror=()=>{
         img.onerror=null;
@@ -141,6 +141,14 @@
     card.setAttribute("aria-label","Campus destination clue for "+b.name);
     card.classList.add("campus-landmark-clue");
     if(caption)caption.textContent="Campus connection: "+b.name;
+    if(photos[b.id]){
+      const source=mk("a","campus-photo-credit","Photo: "+photos[b.id].author+" · CC BY-SA 4.0");
+      source.href="https://commons.wikimedia.org/wiki/File:"+encodeURIComponent(photos[b.id].file);
+      source.target="_blank";
+      source.rel="noopener noreferrer";
+      source.setAttribute("aria-label","Open photo source and licence for "+b.name);
+      card.appendChild(source);
+    }
   });
   document.addEventListener("upic:reset",()=>{
     completed=[];
