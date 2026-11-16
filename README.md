@@ -61,3 +61,34 @@ These are the four additional photos used by the Swap Pictures button in each ro
 - **Close-guess feedback:** a wrong guess now shows how many letters are in the right spot ("So close! 5 of 7 letters are in the right spot") and highlights them green for a moment before clearing, so good reasoning isn't treated like any other wrong answer (playtest finding).
 - **Map Pieces collection (hidden):** set `SHOW_COLLECTION = true` at the top of `wallet.js` to bring back the collectible map-piece cards.
 - **Files:** `wallet.js` and `wallet.css` (code name "wallet"). `script.js` gained a small `window.UPic` API, three events (`upic:unlock`, `upic:maprender`, `upic:reset`), the swap label and the completion message; `index.html` loads the two new files.
+
+
+## Integrated campus learning loop (November 2026 review build)
+
+Players may choose any of the eight UVic building puzzles in any order. The puzzle interface displays a letter-fill progress indicator and uses encouraging position-aware near-miss feedback without automatically clearing an incorrect guess. The fourth picture clue references the associated real building (exterior photo for the McPherson Library, Clearihue, and ECS levels; illustrated campus map for the five remaining buildings).
+
+On solving a word puzzle, a building becomes coloured on the campus map and a collectible Campus Passport card becomes available. The level-complete screen offers **Find this building**, which opens a three-choice visual map-identification mission. Correct identification earns the building's **discovery stamp** (and a bonus hint when room is available), and presents a building fact. The wrong choice can be retried without penalty. All eight mission stamps are tracked in the browser independently of puzzle unlocks. There is no live GPS or routing.
+
+The existing grey-to-colour map effects, audio settings, confetti, and level data are retained. Only three external building photos are available in this version; photo links require a network connection.
+
+### Exterior photo credits
+
+- [McPherson Library photograph](https://commons.wikimedia.org/wiki/File:UVic_McPherson_Library.jpg), Thedarkempire, CC BY-SA 4.0.
+- [Clearihue Building photograph](https://commons.wikimedia.org/wiki/File:UVic_Clearihue_Building.jpg), Tloren5, CC BY-SA 4.0.
+- [ECS Building photograph](https://commons.wikimedia.org/wiki/File:UVic_ECS_Building.png), Thedarkempire, CC BY-SA 4.0.
+
+The puzzle includes clickable photo credits leading to licence information.
+
+### Test checklist before final release
+
+1. Start Level 8 before Level 1 and solve one puzzle.
+2. Fill letters, submit a near-miss and change one letter without clearing the others.
+3. Confirm the fourth campus-linked clue also appears after **Swap pictures**.
+4. On success, check celebration, colour reveal, Passport card, and **Find this building**.
+5. Choose a wrong map crop, then the correct map crop. Confirm exactly one discovery stamp and building fact.
+6. Open Passport to confirm its discovery-stamp badge.
+7. Complete additional missions; check progress counts and the final 8/8 congratulation.
+8. Check map layout, audio on/off, and controls on Safari desktop and phone.
+9. Reset map progress and verify Passport and mission progress are cleared.
+
+This branch has passed JavaScript syntax and static event/file checks, but has **not yet been playtested interactively in a browser**.
