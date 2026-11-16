@@ -593,8 +593,8 @@
         document.getElementById("level-badge").setAttribute("aria-label", `Level ${building.level}`);
         document.querySelector("#level-badge .level-number").textContent = String(building.level);
         document.getElementById("puzzle-title").textContent = `Level ${building.level}: ${building.name}`;
-        document.dispatchEvent(new CustomEvent("upic:puzzlestart", {detail:{building}}));
         showPage("game");
+        document.dispatchEvent(new CustomEvent("upic:puzzlestart", {detail:{building}}));
       }
 
       function updateArrival(building, arrived) {
