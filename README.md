@@ -48,3 +48,11 @@ These are the four additional photos used by the Swap Pictures button in each ro
 - Reduced the map menu dropdown width and constrained its height for laptop and phone screens.
 - Added clearer instructions to the daily quest panel, including where to find each task and when trivia unlocks.
 - Treasure puzzles now use their matching four illustrated clue cards and visible captions, rather than reusing the main-level photos that did not match the treasure answer.
+
+
+## Campus Wallet + grey map (added)
+
+- **Grey map:** the campus starts in greyscale. Each building you unlock blooms back into colour; unlock all 8 and the whole map turns colour with a "Campus complete" celebration.
+- **Campus Wallet:** every solved level adds a collectible map-piece card (cropped from the campus art) to the wallet. Open it from the 👛 button above the map or from the ⋯ menu. Tap a collected card to read that building's info. Locked pieces show blurred and grey.
+- **Celebration:** solving a puzzle plays a short fanfare, fires confetti, and deals the new card into the win popup. Back on the map, the card flies into the wallet before the building colours in. Sounds follow the existing Settings · Audio toggle; animations are skipped for players with "reduce motion" turned on.
+- **Files:** new `wallet.js` and `wallet.css`. `script.js` only gained a small `window.UPic` API and three events (`upic:unlock`, `upic:maprender`, `upic:reset`); `index.html` loads the two new files.

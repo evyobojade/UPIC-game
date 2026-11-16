@@ -873,6 +873,7 @@
           console.warn("U-pic could not clear saved progress; the map is reset for this session only.", error);
         }
         unlockedLevels.clear();
+        document.dispatchEvent(new CustomEvent("upic:reset"));
         exploredRewardBuildings.clear();
         foundTreasures.clear();
         dailyQuestState = { date: todayKey(), visited: [], treasureFound: false, triviaAnswered: false, rewardClaimed: false };
@@ -940,6 +941,7 @@
           mapNodes.appendChild(button);
         });
         updateProgress();
+        document.dispatchEvent(new CustomEvent("upic:maprender"));
       }
 
       function getAudioContext() {
@@ -1072,8 +1074,8 @@
           hints = Math.min(3, hints + 1);
           const earnedHint = hints > hintsBeforeReward;
           saveHintState();
-          playTone(880, 0.3);
           saveProgress();
+          document.dispatchEvent(new CustomEvent("upic:unlock", { detail: { building: activeBuilding } }));
           renderPuzzle();
           renderMap();
           selectedMapBuilding = activeBuilding;
@@ -1257,6 +1259,20 @@
         }
         if (buildingModal.classList.contains("open") || winModal.classList.contains("open") || settingsModal.classList.contains("open") || tourBackdrop.classList.contains("open")) return;
       });
+
+      // Small API used by wallet.js (Campus Wallet, grey map reveal, celebrations).
+      window.UPic = {
+        buildings,
+        isUnlocked: level => unlockedLevels.has(level),
+        unlockedCount: () => unlockedLevels.size,
+        effectsOn: () => audioPreferences.effects,
+        audio: () => getAudioContext(),
+        openBuilding,
+        openModal,
+        closeModal,
+        showPage,
+        closeMenu
+      };
 
       activeBuilding = buildings[0];
       userLetters = Array(answer().length).fill("");

@@ -1,0 +1,146 @@
+/* U-pic — Campus Wallet, grey map, and celebration styles */
+
+/* ---------- Grey map, colour returns per unlocked building ---------- */
+#campus-map.is-grey .campus-map-art:not(.campus-map-colour) {
+  filter: grayscale(1) contrast(.9) brightness(1.07);
+  transition: filter 1.2s ease;
+}
+#campus-map.is-grey.is-complete .campus-map-art:not(.campus-map-colour) { filter: none; }
+#campus-map .campus-map-art.campus-map-colour,
+#map-page #campus-map .campus-map-art.campus-map-colour {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 1;
+  pointer-events: none;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+#campus-map .map-nodes { z-index: 2; }
+
+.map-hotspot.just-unlocked { animation: hotspotPop 1.3s ease-out both; }
+@keyframes hotspotPop {
+  0% { box-shadow: 0 0 0 0 rgb(255 198 41 / 85%); }
+  35% { box-shadow: 0 0 0 14px rgb(255 198 41 / 35%); }
+  100% { box-shadow: 0 0 0 26px rgb(255 198 41 / 0%); }
+}
+.map-hotspot.just-unlocked .map-hotspot-label { animation: labelPop .6s cubic-bezier(.3,1.6,.5,1) both; }
+@keyframes labelPop { from { transform: translateX(-50%) scale(.4); } to { transform: translateX(-50%) scale(1); } }
+
+.campus-complete-banner {
+  position: absolute; z-index: 6; left: 50%; top: 50%;
+  padding: 14px 22px; border: 3px solid #fff; border-radius: 999px;
+  background: #ffc629; color: #0a2b51; box-shadow: 0 12px 40px rgb(10 43 81 / 35%);
+  font-weight: 950; font-size: clamp(13px, 2vw, 20px); text-align: center; white-space: nowrap;
+  transform: translate(-50%, -50%); animation: bannerIn 4.2s ease both; pointer-events: none;
+}
+@keyframes bannerIn {
+  0% { opacity: 0; transform: translate(-50%, -30%) scale(.7); }
+  10%, 85% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -60%) scale(.96); }
+}
+
+/* ---------- Launcher (floating on the map, top right) ---------- */
+#campus-map .wallet-launcher {
+  position: absolute; z-index: 5; top: 10px; right: 10px;
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 10px 7px 12px; border: 2px solid #fff; border-radius: 999px;
+  background: linear-gradient(180deg, #fff9e3, #ffe9a6); color: #123d70;
+  box-shadow: 0 4px 14px rgb(18 61 112 / 25%);
+  font: inherit; font-size: 13px; font-weight: 850; line-height: 1; cursor: pointer;
+  transition: transform .16s ease, box-shadow .16s ease;
+}
+#campus-map .wallet-launcher:hover { transform: translateY(-2px); box-shadow: 0 7px 18px rgb(18 61 112 / 30%); }
+#campus-map .wallet-launcher:focus-visible { outline: 3px solid #e7a900; outline-offset: 2px; }
+.wallet-launcher #wallet-count { padding: 3px 8px; border-radius: 999px; background: #123d70; color: #fff; font-size: 11px; }
+.wallet-launcher.bump { animation: walletBump .55s cubic-bezier(.3,1.7,.5,1); }
+@keyframes walletBump { 0% { transform: scale(1); } 40% { transform: scale(1.18) rotate(-3deg); } 100% { transform: scale(1); } }
+
+/* ---------- Wallet modal ---------- */
+.wallet-modal {
+  position: fixed; z-index: 1250; inset: 0; display: none;
+  align-items: center; justify-content: center; padding: 20px;
+  overflow-y: auto; background: rgb(10 32 56 / 66%); backdrop-filter: blur(7px);
+}
+.wallet-modal.open { display: flex; animation: walletFade .2s ease both; }
+@keyframes walletFade { from { opacity: 0; } to { opacity: 1; } }
+.wallet-sheet {
+  position: relative; width: min(860px, 100%); max-height: min(90vh, 900px); overflow-y: auto;
+  padding: clamp(20px, 3.5vw, 34px); border-radius: 26px;
+  background:
+    radial-gradient(circle at 100% 0, rgb(255 198 41 / 22%), transparent 40%),
+    linear-gradient(180deg, #fffdf6, #fff);
+  box-shadow: 0 24px 80px rgb(0 0 0 / 32%);
+  animation: walletRise .3s cubic-bezier(.2,.9,.3,1.1) both;
+}
+@keyframes walletRise { from { transform: translateY(18px) scale(.97); } to { transform: none; } }
+.wallet-close { position: absolute; top: 14px; right: 14px; }
+.wallet-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 18px; align-items: center; margin-bottom: 14px; padding-right: 36px; }
+.wallet-head h2 { margin: 2px 0 6px; color: #123d70; font-size: clamp(24px, 4vw, 32px); font-weight: 950; letter-spacing: -.04em; }
+.wallet-head .eyebrow { margin: 0; }
+.wallet-sub { margin: 0; color: #4c5f76; font-size: 14px; line-height: 1.55; }
+.wallet-mini { position: relative; width: clamp(110px, 20vw, 190px); aspect-ratio: 1094 / 768; overflow: hidden; border: 3px solid #fff; border-radius: 14px; box-shadow: 0 6px 18px rgb(18 61 112 / 18%); background: #eef2f5; }
+.wallet-mini img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: fill; }
+.wallet-mini-grey { filter: grayscale(1) contrast(.9) brightness(1.07); }
+.wallet-mini-colour { -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; }
+.wallet-meter { height: 10px; margin: 6px 0 20px; overflow: hidden; border-radius: 999px; background: #e7edf3; }
+.wallet-meter-fill { display: block; height: 100%; width: 0; border-radius: inherit; background: linear-gradient(90deg, #ffc629, #e7a900); transition: width .6s cubic-bezier(.2,.9,.3,1); }
+.wallet-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 14px; }
+
+/* ---------- Cards ---------- */
+.wallet-card {
+  position: relative; display: flex; flex-direction: column; padding: 0; overflow: hidden;
+  border: 2px solid #e2e8ef; border-radius: 18px; background: #fff; color: #203249;
+  font: inherit; text-align: left; box-shadow: 0 6px 0 #e2e8ef;
+}
+.wallet-card.owned { border-color: #123d70; box-shadow: 0 6px 0 #0a2b51, 0 10px 24px rgb(18 61 112 / 16%); cursor: pointer; transition: transform .18s ease, box-shadow .18s ease; }
+.wallet-card.owned:hover { transform: translateY(-3px) rotate(-.6deg); }
+.wallet-card.owned:focus-visible { outline: 3px solid #e7a900; outline-offset: 3px; }
+.wallet-card.missing { border-style: dashed; box-shadow: none; background: #f6f8fa; }
+.wallet-card-art { position: relative; aspect-ratio: 4 / 3; background-image: url("assets/campus-map-hd.png"); background-repeat: no-repeat; }
+.wallet-card.owned .wallet-card-art::after { content: ""; position: absolute; inset: 0; background: linear-gradient(115deg, transparent 35%, rgb(255 255 255 / 55%) 48%, transparent 60%); background-size: 260% 100%; background-position: 120% 0; transition: background-position .9s ease; }
+.wallet-card.owned:hover .wallet-card-art::after, .wallet-card.dealing .wallet-card-art::after { background-position: -40% 0; }
+.wallet-card.missing .wallet-card-art { filter: grayscale(1) blur(2.5px) brightness(1.1); opacity: .55; }
+.wallet-card-question { position: absolute; inset: 0; display: grid; place-items: center; color: #6b7888; font-size: 40px; font-weight: 950; filter: none; }
+.wallet-card-badge { position: absolute; top: 10px; left: 10px; display: grid; width: 34px; height: 34px; place-items: center; border: 2px solid #fff; border-radius: 11px; background: #ffc629; box-shadow: 0 3px 8px rgb(0 0 0 / 20%); font-size: 18px; }
+.wallet-card.missing .wallet-card-badge { background: #87919d; font-size: 14px; }
+.wallet-card-body { flex: 1; align-content: start; display: grid; gap: 2px; padding: 10px 12px 13px; border-top: 2px solid #e2e8ef; }
+.wallet-card.owned .wallet-card-body { border-top-color: #123d70; background: linear-gradient(180deg, #123d70, #0a2b51); color: #fff; }
+.wallet-card-level { color: #8a97a7; font-size: 11px; font-weight: 850; letter-spacing: .06em; text-transform: uppercase; }
+.wallet-card.owned .wallet-card-level { color: #ffc629; }
+.wallet-card-name { font-size: 15px; font-weight: 900; line-height: 1.2; }
+.wallet-card-date { color: #6b7888; font-size: 12px; }
+.wallet-card.owned .wallet-card-date { color: #c9d6e6; }
+.wallet-card-stamp { position: absolute; top: 12px; right: -2px; padding: 3px 12px 3px 9px; border: 2px solid #fff; border-radius: 999px 0 0 999px; background: #2a9464; color: #fff; font-size: 11px; font-weight: 900; transform: rotate(0deg); box-shadow: 0 3px 8px rgb(0 0 0 / 18%); }
+
+/* Win popup reward */
+.modal-card.has-reward { overflow-x: hidden; }
+.wallet-reward { display: flex; justify-content: center; margin: 4px auto 14px; perspective: 900px; }
+.wallet-card.big { width: min(250px, 78%); cursor: default; }
+.wallet-card.big:hover { transform: none; }
+.wallet-card.dealing { animation: dealCard 1s cubic-bezier(.2,.9,.25,1.15) both; }
+@keyframes dealCard {
+  0% { opacity: 0; transform: translateY(40px) rotateY(180deg) scale(.6); }
+  55% { opacity: 1; transform: translateY(-8px) rotateY(-10deg) scale(1.04); }
+  100% { opacity: 1; transform: none; }
+}
+.wallet-reward-note { margin: -6px auto 18px !important; color: #2a9464 !important; font-size: 14px !important; font-weight: 850; line-height: 1.5 !important; text-align: center !important; }
+.modal-card.has-reward .modal-icon { display: none !important; }
+.win-actions { flex-wrap: wrap; }
+.win-actions .wallet-win-open { flex: 1 1 100%; }
+
+/* Flying card + confetti */
+.wallet-flyer { position: fixed !important; z-index: 1310; top: 0; left: 0; width: 200px; margin: 0; pointer-events: none; }
+.upic-confetti { position: fixed; z-index: 1300; inset: 0; width: 100vw; height: 100vh; pointer-events: none; }
+
+@media (max-width: 560px) {
+  #campus-map .wallet-launcher .wallet-label { display: none; }
+  #campus-map .wallet-launcher { top: 6px; right: 6px; padding: 5px 6px 5px 9px; font-size: 12px; }
+  .wallet-head { grid-template-columns: 1fr; padding-right: 30px; }
+  .wallet-mini { width: 100%; }
+  .wallet-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .wallet-card-name { font-size: 13px; }
+  .wallet-card-badge { width: 28px; height: 28px; font-size: 15px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wallet-card.dealing, .wallet-launcher.bump, .map-hotspot.just-unlocked, .wallet-sheet { animation: none !important; }
+}
