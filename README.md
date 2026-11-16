@@ -56,3 +56,23 @@ These are the four additional photos used by the Swap Pictures button in each ro
 - **Campus Wallet:** every solved level adds a collectible map-piece card (cropped from the campus art) to the wallet. Open it from the 👛 button above the map or from the ⋯ menu. Tap a collected card to read that building's info. Locked pieces show blurred and grey.
 - **Celebration:** solving a puzzle plays a short fanfare, fires confetti, and deals the new card into the win popup. Back on the map, the card flies into the wallet before the building colours in. Sounds follow the existing Settings · Audio toggle; animations are skipped for players with "reduce motion" turned on.
 - **Files:** new `wallet.js` and `wallet.css`. `script.js` only gained a small `window.UPic` API and three events (`upic:unlock`, `upic:maprender`, `upic:reset`); `index.html` loads the two new files.
+
+
+## Campus discovery update (review branch)
+- **Choose your route:** all eight building puzzles may now be chosen in any order. Grey-to-colour unlocking is still earned individually by completing puzzles.
+- **Building previews:** the puzzle view displays verified exterior photos for McPherson Library, Clearihue, and Engineering & Computer Science from Wikimedia Commons. Other buildings currently show the illustrated campus map. Photo credit and licensing should be confirmed before final release; the remote image URLs require internet access.
+- **Wayfinding:** a new Campus Wayfinding Challenge asks players to locate a named/functional building on the illustrated map. Correct selections are tracked locally across sessions; reset progress clears them. This is a map-knowledge activity, not GPS navigation.
+- **Campus Passport:** the existing collection card feature now uses the name Campus Passport.
+- **Feedback:** the near-miss feature from the parent branch preserves incorrect answers for editing, with correct-position highlighting and encouraging messages.
+- **Responsive UI:** new styles for the building preview and the wayfinding challenge.
+- **Review checklist:** test one incorrect answer with at least half its letters in correct positions, one related-length wrong answer if the tile assortment permits, a correct solve, an unlock animation, a passport card, free-choice Level 8 before Level 1, all eight wayfinding locations, reset progress, phone view, and sound/off.
+- **Important:** external Wikimedia photos may not load on some networks. Their failure fallback is the existing illustrated UVic campus map.
+- **Deferred:** a real route planner, comprehensive official building photography for all eight locations, and a new word-clue set built specifically around campus exteriors; these need further design and validation.
+
+### Source credits for building previews
+
+- McPherson Library: Thedarkempire, [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:UVic_McPherson_Library.jpg), CC BY-SA 4.0.
+- Clearihue Building: Tloren5, [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:UVic_Clearihue_Building.jpg), CC BY-SA 4.0.
+- Engineering & Computer Science: Thedarkempire, [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:UVic_ECS_Building.png), CC BY-SA 4.0.
+
+The above images load remotely and show source/creator attribution in-game. If unavailable, the illustrated map is shown instead.
