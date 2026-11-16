@@ -8,3 +8,63 @@
 .campus-challenge p{flex:1 1 240px;margin:0;font-size:14px;}
 .campus-challenge button{flex:0 0 auto;}
 @media(max-width:600px){.campus-photo-spot{padding:6px 8px;}.campus-photo-spot img{width:64px;height:52px;}.campus-challenge{padding:12px;}.campus-challenge button{width:100%;}}
+
+
+/* Campus discovery layout fix: do not overlay the existing arrival card on the
+   new wayfinding panel. Override old fullscreen/absolute map-page rules. */
+@media (min-width: 900px) {
+  body:has(#map-page.active) {
+    height: auto !important;
+    min-height: 100svh !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+  }
+  body:has(#map-page.active) .app {
+    height: auto !important;
+    min-height: 100svh !important;
+    overflow: visible !important;
+  }
+  body:has(#map-page.active) main {
+    height: auto !important;
+    overflow: visible !important;
+  }
+  #map-page.page {
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+  }
+  #map-page .map-layout {
+    height: auto !important;
+    overflow: visible !important;
+  }
+}
+#map-page .map-frame {
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+#map-page .campus-challenge {
+  position: relative !important;
+  z-index: 1 !important;
+  flex: 0 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 12px 0 0 !important;
+}
+#map-page .map-arrival {
+  position: relative !important;
+  inset: auto !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  z-index: 1 !important;
+  flex: 0 0 auto;
+  width: 100% !important;
+  box-sizing: border-box;
+  margin: 0 0 18px !important;
+}
+@media (max-width: 899px) {
+  #map-page .map-layout,
+  #map-page .map-frame { height: auto !important; overflow: visible !important; }
+  #map-page .map-arrival { grid-template-columns: minmax(0, 1fr) !important; }
+}
