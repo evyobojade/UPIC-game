@@ -1,0 +1,36 @@
+/* UPIC campus mission and layout upgrade */
+.puzzle-progress { margin:4px auto 8px; padding:5px 12px; width:max-content; max-width:100%; border-radius:999px; background:#e8f4ff; color:#123d70; font-size:12px; font-weight:800; }
+#game-page .campus-landmark-clue { border:2px solid #e6b331; }
+#game-page .campus-landmark-clue .clue-caption { color:#133a68; font-weight:800; }
+#win-modal .mission-launch[hidden] {display:none !important;}
+#win-modal .mission-launch {flex:1 1 100%; font-weight:850;}
+.mission-overlay[hidden]{display:none !important;}
+.mission-overlay{position:fixed;z-index:1400;inset:0;display:grid;place-items:center;padding:18px;background:rgba(13,31,57,.75);box-sizing:border-box;overflow:auto;}
+.mission-sheet{position:relative;max-height:calc(100svh - 36px);overflow:auto;width:min(760px,100%);padding:clamp(17px,3vw,30px);box-sizing:border-box;border-radius:22px;background:#fff;box-shadow:0 18px 75px rgba(0,0,0,.35);color:#193451;}
+.mission-close{position:absolute;top:10px;right:14px;border:0;background:#ecf3fa;border-radius:50%;font-size:28px;width:38px;height:38px;cursor:pointer;color:#123d70;}
+.mission-eyebrow{color:#a77510;font-weight:900;letter-spacing:.08em;font-size:12px;margin:0 45px 6px 0;}
+.mission-sheet h2{margin:0 30px 7px 0;font-size:clamp(23px,4vw,33px);color:#123d70;}
+#mission-prompt{font-size:15px;line-height:1.5;margin:5px 0 8px;}
+#mission-count{font-size:12px;font-weight:800;color:#477396;margin:0 0 12px;}
+.mission-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:12px 0;}
+.mission-option{appearance:none;cursor:pointer;background:#f4f7fa;border:3px solid #dbe5ef;border-radius:13px;padding:6px;display:flex;flex-direction:column;gap:6px;color:#17314f;min-width:0;transition:border-color .2s,transform .2s;}
+.mission-option:focus-visible{outline:3px solid #e0a500;outline-offset:2px;}
+.mission-option:hover:not(:disabled){transform:translateY(-3px);border-color:#2d7cb6;}
+.mission-option.correct{border-color:#268653;background:#e7f8ef;}
+.mission-option.incorrect{border-color:#c78c8b;}
+.mission-map-crop{width:100%;aspect-ratio:1.15;display:block;border-radius:8px;background-repeat:no-repeat;background-color:#ddd;filter:grayscale(.45);}
+.mission-option.correct .mission-map-crop{filter:none;}
+.mission-area-label{display:block;text-align:center;font-size:13px;font-weight:850;line-height:1.4;}
+#mission-feedback{min-height:38px;color:#206444;font-weight:800;line-height:1.4;margin:10px 0;}
+.mission-done{border:0;background:#123d70;color:white;cursor:pointer;border-radius:11px;padding:12px 18px;font-weight:800;}
+@media(max-width:650px){.mission-options{gap:6px;}.mission-option{padding:4px;}.mission-area-label{font-size:11px;}.mission-sheet{padding:16px;}}
+/* Existing campus UI uses legacy absolute positioning. Keep arrival information
+   in the normal flow with the map, and allow scrolling on tall screens. */
+#map-page .map-frame{height:auto !important;max-height:none !important;overflow:visible !important;display:flex !important;flex-direction:column !important;gap:10px !important;}
+#map-page .map-arrival{position:relative !important;inset:auto !important;top:auto !important;left:auto !important;right:auto !important;bottom:auto !important;width:100% !important;margin:0 0 18px !important;box-sizing:border-box;}
+@media(min-width:900px){
+body:has(#map-page.active){height:auto !important;min-height:100svh !important;overflow-y:auto !important;}
+body:has(#map-page.active) .app{height:auto !important;min-height:100svh !important;overflow:visible !important;}
+body:has(#map-page.active) main{height:auto !important;min-height:0 !important;overflow:visible !important;}
+#map-page.page,#map-page .map-layout{height:auto !important;min-height:0 !important;overflow:visible !important;}
+}
