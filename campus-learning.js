@@ -16,9 +16,12 @@
     cle:"study languages or humanities"
   };
   const photos = {
-    mcpherson:{file:"UVic McPherson Library.jpg", author:"Thedarkempire"},
-    cle:{file:"UVic Clearihue Building.jpg", author:"Tloren5"},
-    ecss:{file:"UVic ECS Building.png", author:"Thedarkempire"}
+    mcpherson:{file:"UVic McPherson Library.jpg", author:"Thedarkempire",license:"CC BY-SA 4.0"},
+    cle:{file:"UVic Clearihue Building.jpg", author:"Tloren5",license:"CC BY-SA 4.0"},
+    ecss:{file:"UVic ECS Building.png", author:"Thedarkempire",license:"CC BY-SA 4.0"},
+    strong:{file:"David Strong building East side. READ MORE IN PANORAMIO-COMMENT - panoramio.jpg",author:"John Newcomb",license:"CC BY 3.0"},
+    bob:{file:"Bob Wright Centre for Ocean Earth and Atmosphere Sciences. READ INFO IN PANORAMIO-COMMENTS - panoramio.jpg",author:"John Newcomb",license:"CC BY 3.0"},
+    jcc:{file:"University Centre. READ MORE IN PANORAMIO-COMMENT - panoramio.jpg",author:"John Newcomb",license:"CC BY 3.0"}
   };
   let completed = [];
   try {
@@ -142,7 +145,7 @@
     card.classList.add("campus-landmark-clue");
     if(caption)caption.textContent="Campus connection: "+b.name;
     if(photos[b.id]){
-      const source=mk("a","campus-photo-credit","Photo: "+photos[b.id].author+" · CC BY-SA 4.0");
+      const source=mk("a","campus-photo-credit","Photo: "+photos[b.id].author+" · "+photos[b.id].license);
       source.href="https://commons.wikimedia.org/wiki/File:"+encodeURIComponent(photos[b.id].file);
       source.target="_blank";
       source.rel="noopener noreferrer";
