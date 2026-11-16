@@ -119,7 +119,7 @@
           clues: clue([8199762, 9572464, 5234735, 6549368, 8197511, 37810244, 8423404, 8199160], ["Students studying", "Library study", "Study partners", "Study materials", "Students in a classroom", "Students collaborating", "Classroom discussion", "Students learning together"]),
           description: "The David Strong Building is an academic building on UVic's campus. Students use campus learning spaces to attend classes, work on assignments, and meet with classmates.",
           facts: ["Academic and teaching spaces", "Student learning", "A place to work on coursework"],
-          photo: realBuildingPhoto("assets/buildings/david-strong-building.jpg", "Exterior of the David Strong Building", "Photo: University of Victoria", "https://www.uvic.ca/search/buildings/pages/david-strong.php")
+          photo: realBuildingPhoto("https://www.uvic.ca/info/_assets/images/content-main/buildings-dsb-720x405.jpg", "Exterior of the David Strong Building", "Photo: University of Victoria", "https://www.uvic.ca/search/buildings/pages/david-strong.php")
         },
         {
           level: 4, id: "maclaurin", name: "MacLaurin Building", icon: "✏️", left: 11, top: 56, width: 22, height: 15, labelTop: 59,
@@ -151,7 +151,7 @@
           clues: clue([37805464, 7431367, 19234633, 35120738, 9001997, 38756923, 5192291, 13899690], ["Live performance", "Singer with microphone", "Event crowd", "People celebrating", "Stage ready for a performance", "Live concert", "Audience at a concert", "Crowd at a live event"]),
           description: "The Jamie Cassels Centre is a central campus venue used for a range of university activities and gatherings. Its event spaces help bring students, faculty, and visitors together.",
           facts: ["Meetings and gatherings", "University events", "A recognizable campus landmark"],
-          photo: realBuildingPhoto("assets/buildings/jamie-cassels-centre.jpg", "Exterior of the Jamie Cassels Centre", "Photo: University of Victoria", "https://www.uvic.ca/search/buildings/pages/jamie-cassels-centre.php")
+          photo: realBuildingPhoto("https://www.uvic.ca/info/_assets/images/content-main/buildings-jamie-cassels-720x405.jpg", "Exterior of the Jamie Cassels Centre", "Photo: University of Victoria", "https://www.uvic.ca/search/buildings/pages/jamie-cassels-centre.php")
         },
         {
           level: 8, id: "cle", name: "Clearihue Building", icon: "🌎", left: 58, top: 20, width: 18, height: 18, labelTop: 68,
