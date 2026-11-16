@@ -5,9 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#123d70">
   <title>U-pic — A UVic campus word game</title>
-  <link rel="stylesheet" href="style.css?v=20261115-layout3">
-  <link rel="stylesheet" href="wallet.css?v=20261115-layout3">
-  <link rel="stylesheet" href="campus-extras.css?v=20261115-layout3">
+  <link rel="stylesheet" href="style.css?v=final-1">
+  <link rel="stylesheet" href="wallet.css?v=final-1">
 </head>
 <body>
   <div class="app">
@@ -76,7 +75,6 @@
             </span>
           </div>
           <h1 id="puzzle-title" class="sr-only">Level 1</h1>
-          <div id="campus-photo-spot" class="campus-photo-spot" hidden aria-label="UVic landmark preview"></div>
           <div id="clue-grid" class="clue-grid" aria-label="Four picture clues"></div>
           <div id="letter-slots" class="letter-slots" role="group" aria-label="Answer letters"></div>
           <p id="slot-help" class="slot-help">Tap a filled slot to undo it. Need help? Use a hint or swap the pictures.</p>
@@ -129,12 +127,11 @@
               <div class="map-nodes" id="map-nodes" aria-label="Campus building levels"></div>
               <span class="map-character" id="map-character" aria-hidden="true">🧑‍🎓</span>
             </div>
-            <section class="campus-challenge" id="campus-challenge" aria-label="Campus wayfinding challenge"></section>
-            <section class="map-arrival" id="map-arrival" aria-live="polite" style="position:relative !important; inset:auto !important; width:100% !important; margin:10px 0 18px !important; box-sizing:border-box !important;">
+            <section class="map-arrival" id="map-arrival" aria-live="polite">
               <div>
                 <p class="eyebrow" id="map-arrival-eyebrow">Your campus adventure</p>
                 <h2 id="map-arrival-title">Ready to explore?</h2>
-                <p id="map-arrival-copy">Choose any building to explore the map. You can visit locked buildings for discovery rewards, but you can play any building puzzle.</p>
+                <p id="map-arrival-copy">Choose any building to explore the map. You can visit locked buildings for discovery rewards, but only the next available level can be played.</p>
               </div>
               <div class="map-arrival-actions">
                 <button class="button gold" type="button" id="map-play-button" hidden>▶ &nbsp;Play Level 1</button>
@@ -253,8 +250,7 @@
     </div>
   </div>
 
-  <script src="script.js?v=20261115-layout3" defer></script>
-  <script src="wallet.js?v=20261115-layout3" defer></script>
-  <script src="campus-extras.js?v=20261115-layout3" defer></script>
+  <script src="script.js?v=final-1" defer></script>
+  <script src="wallet.js?v=final-1" defer></script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-/* U-pic — Campus Wallet, grey map, and celebration styles */
+/* U-pic — Map Pieces collection (code name: wallet), grey map, and celebration styles */
 
 /* ---------- Grey map, colour returns per unlocked building ---------- */
 #campus-map.is-grey .campus-map-art:not(.campus-map-colour) {
@@ -39,21 +39,52 @@
   100% { opacity: 0; transform: translate(-50%, -60%) scale(.96); }
 }
 
-/* ---------- Launcher (floating on the map, top right) ---------- */
-#campus-map .wallet-launcher {
-  position: absolute; z-index: 5; top: 10px; right: 10px;
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 7px 10px 7px 12px; border: 2px solid #fff; border-radius: 999px;
-  background: linear-gradient(180deg, #fff9e3, #ffe9a6); color: #123d70;
-  box-shadow: 0 4px 14px rgb(18 61 112 / 25%);
-  font: inherit; font-size: 13px; font-weight: 850; line-height: 1; cursor: pointer;
-  transition: transform .16s ease, box-shadow .16s ease;
+/* ---------- Top bar HUD: progress + wallet (keeps the map clear) ---------- */
+#map-page .map-count { display: none !important; }            /* replaced by the HUD pills */
+.map-hud { display: none; }
+body:has(#map-page.active):not(:has(#game-page.active)) .map-hud {
+  display: flex; align-items: center; gap: 8px; margin-left: auto;
 }
-#campus-map .wallet-launcher:hover { transform: translateY(-2px); box-shadow: 0 7px 18px rgb(18 61 112 / 30%); }
-#campus-map .wallet-launcher:focus-visible { outline: 3px solid #e7a900; outline-offset: 2px; }
+.map-hud-stat, .wallet-launcher {
+  display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px;
+  border: 1px solid #e1e8f0; border-radius: 999px; background: #fff;
+  box-shadow: 0 3px 0 #e1e8f0; color: #123d70;
+  font: inherit; font-size: 13px; font-weight: 750; line-height: 1; white-space: nowrap;
+}
+.map-hud-stat b { font-weight: 950; }
+.wallet-launcher { border-color: #f0d27a; background: linear-gradient(180deg, #fff9e3, #ffe9a6); box-shadow: 0 3px 0 #f0d27a; font-weight: 850; cursor: pointer; transition: transform .16s ease; }
+.wallet-launcher:hover { transform: translateY(-2px); }
+.wallet-launcher:focus-visible { outline: 3px solid #e7a900; outline-offset: 2px; }
 .wallet-launcher #wallet-count { padding: 3px 8px; border-radius: 999px; background: #123d70; color: #fff; font-size: 11px; }
 .wallet-launcher.bump { animation: walletBump .55s cubic-bezier(.3,1.7,.5,1); }
 @keyframes walletBump { 0% { transform: scale(1); } 40% { transform: scale(1.18) rotate(-3deg); } 100% { transform: scale(1); } }
+
+/* ---------- Bigger map: use all the height the screen allows ---------- */
+/* The building hotspots are positioned for a map that fills its frame, so draw the art that way on every screen size. */
+#map-page #campus-map .campus-map-art { object-fit: fill !important; }
+@media (min-width: 900px) {
+  body:has(#map-page.active) .topbar { left: 14px !important; right: 14px !important; width: auto !important; padding-right: 0 !important; }
+  #map-page .map-layout { align-items: flex-start !important; }
+  #map-page .map-frame {
+    width: min(calc(100vw - 24px), calc((100svh - 74px) * 1.424)) !important;
+    height: auto !important;
+    margin: 60px auto 0 !important;
+    gap: 0 !important;
+  }
+}
+@media (max-width: 899px) {
+  body:has(#map-page.active) .topbar {
+    position: absolute !important; top: 8px !important; left: 10px !important; right: 10px !important;
+    display: flex !important; align-items: center !important;
+    width: auto !important; margin: 0 !important; padding: 0 !important; box-sizing: border-box !important;
+  }
+  body:has(#map-page.active):not(:has(#game-page.active)) .map-hud { gap: 5px; }
+  .map-hud-stat, .wallet-launcher { height: 32px; padding: 0 8px; gap: 4px; font-size: 12px; }
+  .wallet-launcher #wallet-count { padding: 3px 6px; }
+  body:has(#map-page.active) .topbar { gap: 6px; }
+  .map-hud-label, .wallet-label { display: none; }
+  #map-page.page { padding-top: 60px !important; }
+}
 
 /* ---------- Wallet modal ---------- */
 .wallet-modal {
@@ -144,3 +175,55 @@
 @media (prefers-reduced-motion: reduce) {
   .wallet-card.dealing, .wallet-launcher.bump, .map-hotspot.just-unlocked, .wallet-sheet { animation: none !important; }
 }
+
+/* ---------- Win popup fits on one screen (no scrolling) ---------- */
+#win-modal .modal-card.has-reward { max-height: calc(100svh - 24px) !important; padding: 22px 24px 20px !important; }
+#win-modal .modal-card.has-reward .eyebrow { margin-bottom: 8px !important; }
+#win-modal .wallet-reward { margin: 0 auto 10px; }
+#win-modal .wallet-card.big { width: min(190px, 60%); }
+#win-modal .wallet-card.big .wallet-card-art { aspect-ratio: 16 / 9; }
+#win-modal .wallet-card.big .wallet-card-body { padding: 7px 10px 9px; }
+#win-modal .wallet-card.big .wallet-card-name { font-size: 14px; }
+#win-modal .modal-card.has-reward h2 { margin: 0 0 4px !important; font-size: clamp(20px, 3vw, 26px) !important; }
+#win-modal .wallet-reward-note { margin: 0 auto 8px !important; font-size: 13px !important; }
+#win-modal .modal-card.has-reward #win-copy { margin: 0 auto 14px !important; font-size: 14px !important; line-height: 1.5 !important; text-align: center !important; }
+#win-modal .win-actions { gap: 8px !important; }
+#win-modal .win-actions .button { min-height: 42px !important; }
+@media (max-height: 620px) {
+  #win-modal .wallet-card.big { width: 150px; }
+  #win-modal .modal-card.has-reward #win-copy { display: none; }
+}
+
+/* ---------- Building panel: one slim row so it doesn't cover the map ---------- */
+@media (min-width: 900px) {
+  #map-page .map-arrival {
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    align-items: center !important;
+    gap: 2px 14px !important;
+    padding: 8px 12px 8px 16px !important;
+    min-height: 0 !important;
+  }
+  #map-page .map-arrival .eyebrow { margin: 0 !important; font-size: 10px !important; }
+  #map-page .map-arrival h2 { margin: 0 !important; font-size: 16px !important; line-height: 1.2 !important; }
+  #map-page .map-arrival p:not(.eyebrow) {
+    display: -webkit-box !important; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;
+    margin: 0 !important; font-size: 12px !important; line-height: 1.4 !important;
+  }
+  #map-page .map-arrival-actions { flex-wrap: nowrap !important; gap: 6px !important; }
+  #map-page .map-arrival-actions .button { min-height: 34px !important; height: 34px !important; padding: 0 12px !important; font-size: 12px !important; white-space: nowrap !important; }
+}
+
+/* Team decision (playtest): building panel = Play + Building info only. Trivia moved to the top bar (earns hints, 3 per hour). */
+#map-page #map-arrival #treasure-search-button, #map-page #map-arrival #trivia-open-button,
+#map-page #treasure-open, #map-page #trivia-open { display: none !important; }
+.trivia-launcher .trivia-count { padding: 3px 8px; border-radius: 999px; background: #2a9464; color: #fff; font-size: 11px; }
+
+/* ---------- Near-miss feedback on wrong guesses ---------- */
+#game-page .letter-slot.right-spot { border-color: #2a9464 !important; background: #e3f6ec !important; color: #17603f !important; animation: rightSpotPop .35s ease both; }
+#game-page .letter-slot.wrong-spot { opacity: .55; }
+@keyframes rightSpotPop { 0% { transform: scale(1); } 50% { transform: scale(1.12); } 100% { transform: scale(1); } }
+#game-page .status-message.near { color: #17603f !important; font-weight: 850; }
+#game-page #fake-keyboard.checking { pointer-events: none; opacity: .6; }
+#game-page #slot-help.guess-feedback { color: #b6473d !important; font-weight: 800 !important; }
+#game-page #slot-help.guess-feedback.near { color: #17603f !important; }
+#game-page #slot-help.guess-feedback ~ * #status-message, #game-page .status-message.near, #game-page .status-message.error { display: none !important; }

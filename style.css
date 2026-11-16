@@ -1742,13 +1742,3 @@ body.modal-open { overflow: hidden; }
   }
   #map-page .map-legend-icon { width: 9px !important; height: 9px !important; flex-basis: 9px !important; }
 }
-
-
-    /* Helpful near-miss feedback: correct-position letters remain editable. */
-    #game-page .letter-slot.near-match,
-    #game-page .letter-slot.filled.near-match {
-      background: #d7f4e5;
-      border-color: #24875d;
-      color: #14533b;
-      box-shadow: 0 0 0 2px rgba(36, 135, 93, .15);
-    }

@@ -1,4 +1,4 @@
-/* U-pic — Campus Passport, grey-to-colour map reveal, and win celebrations.
+/* U-pic — Map Pieces collection (code name: wallet), grey-to-colour map reveal, and win celebrations.
    Builds on script.js through window.UPic and the upic:* events it fires. */
 (() => {
   "use strict";
@@ -10,6 +10,9 @@
   const walletKey = "u-pic-wallet-v1";
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const total = api.buildings.length;
+  // Team decision (playtest): keep the grey-to-colour map + celebration, hide the Map Pieces collection.
+  // Set to true to bring back the collection button, menu item and screen.
+  const SHOW_COLLECTION = false;
 
   let collected = {};                      // building id -> ISO date collected
   try { collected = JSON.parse(localStorage.getItem(walletKey) || "{}") || {}; } catch (e) { collected = {}; }
@@ -192,9 +195,9 @@
 
   /* ---------- Wallet card ---------- */
   function formatDate(iso) {
-    if (!iso) return "Collected";
-    try { return "Collected " + new Date(iso).toLocaleDateString(undefined, { month: "short", day: "numeric" }); }
-    catch (e) { return "Collected"; }
+    if (!iso) return SHOW_COLLECTION ? "Collected" : "Unlocked";
+    try { return (SHOW_COLLECTION ? "Collected " : "Unlocked ") + new Date(iso).toLocaleDateString(undefined, { month: "short", day: "numeric" }); }
+    catch (e) { return SHOW_COLLECTION ? "Collected" : "Unlocked"; }
   }
 
   function makeCard(b, { big = false } = {}) {
@@ -212,7 +215,7 @@
     const badge = el("span", "wallet-card-badge", owned ? b.icon : "🔒");
     badge.setAttribute("aria-hidden", "true");
     const body = el("div", "wallet-card-body");
-    body.appendChild(el("span", "wallet-card-level", `Piece ${b.level} / ${total}`));
+    body.appendChild(el("span", "wallet-card-level", SHOW_COLLECTION ? `Piece ${b.level} / ${total}` : `Level ${b.level} · Unlocked`));
     body.appendChild(el("strong", "wallet-card-name", owned ? b.name : "Not found yet"));
     body.appendChild(el("span", "wallet-card-date", owned ? formatDate(collected[b.id]) : `Solve Level ${b.level} to collect`));
     card.append(art, badge, body);
@@ -232,15 +235,115 @@
   const launcher = el("button", "wallet-launcher");
   launcher.type = "button";
   launcher.id = "wallet-open";
-  launcher.innerHTML = `📘<span class="wallet-label"> Campus Passport</span> <span id="wallet-count">0/${total}</span>`;
-  launcher.setAttribute("aria-label", "Open Campus Passport");
-  // The wallet button sits on the map itself (the activity strip above the map is hidden in v14.2+).
-  if (campusMap) campusMap.appendChild(launcher);
-  else if (dock) dock.prepend(launcher);
+  launcher.innerHTML = `🧩<span class="wallet-label"> Map Pieces</span> <span id="wallet-count">0/${total}</span>`;
+  launcher.setAttribute("aria-label", "Open your Map Pieces collection");
+  // Top bar HUD: progress counters + wallet, so nothing sits on top of the campus map.
+  const topbar = document.querySelector(".topbar");
+  const hud = el("div", "map-hud");
+  hud.setAttribute("aria-label", "Campus progress");
+  const statBuildings = el("span", "map-hud-stat");
+  statBuildings.title = "Buildings unlocked";
+  const statHints = el("span", "map-hud-stat");
+  statHints.title = "Discovery hints collected";
+  hud.append(statBuildings, statHints);
+  if (SHOW_COLLECTION) hud.append(launcher);
+
+  /* ---------- Trivia for hints (top bar): up to 3 hints per hour ---------- */
+  const TRIVIA_HINTS_PER_HOUR = 3;
+  const triviaKey = "u-pic-trivia-hint-times-v1";
+  const HOUR = 60 * 60 * 1000;
+  const recentTriviaHints = () => {
+    let times = [];
+    try { times = JSON.parse(localStorage.getItem(triviaKey) || "[]"); } catch (e) { times = []; }
+    const now = Date.now();
+    return (Array.isArray(times) ? times : []).filter(t => now - t < HOUR);
+  };
+  const saveTriviaHints = times => { try { localStorage.setItem(triviaKey, JSON.stringify(times)); } catch (e) { /* session only */ } };
+  const triviaLeft = () => Math.max(0, TRIVIA_HINTS_PER_HOUR - recentTriviaHints().length);
+  const minutesUntilNext = () => {
+    const times = recentTriviaHints();
+    if (times.length < TRIVIA_HINTS_PER_HOUR) return 0;
+    return Math.max(1, Math.ceil((Math.min(...times) + HOUR - Date.now()) / 60000));
+  };
+  const triviaBtn = el("button", "wallet-launcher trivia-launcher");
+  triviaBtn.type = "button";
+  triviaBtn.setAttribute("aria-label", "Answer campus trivia to earn a hint");
+  hud.append(triviaBtn);
+  function renderTriviaBtn() {
+    const left = triviaLeft();
+    triviaBtn.innerHTML = left
+      ? `🧠<span class="wallet-label"> Trivia: earn a hint</span> <span class="trivia-count">${left} left</span>`
+      : `🧠<span class="wallet-label"> Trivia</span> <span class="trivia-count">${minutesUntilNext()} min</span>`;
+  }
+  renderTriviaBtn();
+  setInterval(renderTriviaBtn, 30000);
+  let lastQuestionId = null;
+
+  function openTopTrivia() {
+    const unlocked = api.buildings.filter(b => api.isUnlocked(b.level) && api.trivia[b.id]);
+    const say = (cls, text) => api.activityText("p", cls, text);
+    if (!unlocked.length) {
+      api.openActivityModal("Trivia for hints", "Unlock a building first", say("activity-intro", "Solve the Level 1 picture puzzle to unlock your first building. Then come back here to answer trivia about it and earn hints."));
+      return;
+    }
+    const left = triviaLeft();
+    if (!left) {
+      api.openActivityModal("Trivia for hints", "Come back soon", say("activity-intro", `You've earned all ${TRIVIA_HINTS_PER_HOUR} trivia hints for this hour. More trivia unlocks in about ${minutesUntilNext()} minute${minutesUntilNext() === 1 ? "" : "s"}.`));
+      return;
+    }
+    let pool = unlocked.filter(b => b.id !== lastQuestionId);
+    if (!pool.length) pool = unlocked;
+    const b = pool[Math.floor(Math.random() * pool.length)];
+    lastQuestionId = b.id;
+    const q = api.trivia[b.id];
+    const content = document.createElement("div");
+    content.className = "trivia-modal-content";
+    content.append(say("activity-intro", `Answer correctly to earn 💡 +1 hint (${left} of ${TRIVIA_HINTS_PER_HOUR} left this hour). About ${b.name}: ${q.question}`));
+    const choices = document.createElement("div");
+    choices.className = "trivia-choices";
+    const feedback = say("trivia-feedback", "");
+    q.choices.forEach((choice, index) => {
+      const button = api.activityText("button", "trivia-choice", choice);
+      button.type = "button";
+      button.addEventListener("click", () => {
+        if (index !== q.answer) {
+          feedback.textContent = "Not quite. Try again!";
+          feedback.className = "trivia-feedback try-again";
+          return;
+        }
+        choices.querySelectorAll("button").forEach(option => { option.disabled = true; });
+        feedback.className = "trivia-feedback correct";
+        if (api.addHint()) {
+          const times = recentTriviaHints(); times.push(Date.now()); saveTriviaHints(times);
+          playSparkle();
+          feedback.textContent = `Correct! +1 hint. You now have ${api.hintCount()}/3 hints. ${q.fact}`;
+        } else {
+          feedback.textContent = `Correct! Your hints are already full (3/3), so save this one for later. ${q.fact}`;
+        }
+        renderTriviaBtn();
+      });
+      choices.append(button);
+    });
+    content.append(choices, feedback);
+    api.openActivityModal("Trivia for hints", "Learn something about UVic", content);
+  }
+  triviaBtn.addEventListener("click", openTopTrivia);
+  if (topbar) topbar.appendChild(hud);
+  else if (campusMap) campusMap.appendChild(launcher);
+  const syncStats = () => {
+    const b = document.getElementById("map-count"), h = document.getElementById("exploration-count");
+    statBuildings.innerHTML = `🏛️ <b>${b ? b.textContent.replace(/\s+/g, "") : "0/8"}</b><span class="map-hud-label"> buildings</span>`;
+    statHints.innerHTML = `💡 <b>${h ? h.textContent.replace(/\s+/g, "") : "0/8"}</b><span class="map-hud-label"> hints found</span>`;
+  };
+  ["map-count", "exploration-count"].forEach(id => {
+    const node = document.getElementById(id);
+    if (node) new MutationObserver(syncStats).observe(node, { childList: true, characterData: true, subtree: true });
+  });
+  syncStats();
 
   const menuPanel = document.getElementById("menu-panel");
-  if (menuPanel) {
-    const item = el("button", null, "Campus Passport");
+  if (menuPanel && SHOW_COLLECTION) {
+    const item = el("button", null, "Map Pieces");
     item.type = "button";
     item.setAttribute("role", "menuitem");
     item.addEventListener("click", () => { api.closeMenu(); openWallet(); });
@@ -255,11 +358,11 @@
   modal.setAttribute("aria-hidden", "true");
   modal.innerHTML = `
     <div class="wallet-sheet">
-      <button class="modal-close wallet-close" type="button" aria-label="Close Campus Passport">×</button>
+      <button class="modal-close wallet-close" type="button" aria-label="Close Map Pieces">×</button>
       <header class="wallet-head">
         <div>
           <p class="eyebrow">Your collection</p>
-          <h2 id="wallet-title">Campus Passport</h2>
+          <h2 id="wallet-title">Map Pieces</h2>
           <p class="wallet-sub" id="wallet-sub"></p>
         </div>
         <div class="wallet-mini" aria-hidden="true">
@@ -322,9 +425,9 @@
     const note = el("p", "wallet-reward-note", "");
     note.id = "wallet-reward-note";
     title.after(note);
-    openWalletBtn = el("button", "button secondary wallet-win-open", "👛 Open Campus Passport");
+    openWalletBtn = el("button", "button secondary wallet-win-open", "🧩 See my Map Pieces");
     openWalletBtn.type = "button";
-    winCard.querySelector(".win-actions").appendChild(openWalletBtn);
+    if (SHOW_COLLECTION) winCard.querySelector(".win-actions").appendChild(openWalletBtn);
     openWalletBtn.addEventListener("click", () => {
       api.closeModal(winModal);
       api.showPage("map");
@@ -338,7 +441,7 @@
 
   function flyCardToWallet(b, done) {
     const target = launcher.getBoundingClientRect();
-    if (reduceMotion || !target.width) { bumpLauncher(); done(); return; }
+    if (reduceMotion || !SHOW_COLLECTION || !target.width) { bumpLauncher(); done(); return; }
     const flyer = makeCard(b);
     flyer.classList.add("wallet-flyer");
     flyer.removeAttribute("aria-label");
@@ -387,9 +490,9 @@
       card.disabled = true;
       rewardSlot.replaceChildren(card);
       const remaining = total - api.unlockedCount();
-      document.getElementById("wallet-reward-note").textContent = remaining
-        ? `Map piece ${b.level} added to your Campus Passport. ${remaining} to go!`
-        : "The final map piece! Your Campus Passport is complete.";
+      document.getElementById("wallet-reward-note").textContent = SHOW_COLLECTION
+        ? (remaining ? `Map piece ${b.level} collected. ${remaining} to go!` : "The final map piece! Your campus map is complete.")
+        : (remaining ? `This part of campus is back in colour. ${remaining} building${remaining === 1 ? "" : "s"} to go!` : "Every building unlocked. The whole campus is back in colour!");
     }
     confetti();
     playFanfare(api.unlockedCount() === total);
@@ -401,6 +504,8 @@
     setTimeout(runPendingReveal, 120);
   });
   document.addEventListener("upic:reset", () => {
+    saveTriviaHints([]);
+    renderTriviaBtn();
     collected = {};
     saveWallet();
     revealProgress = {};

@@ -573,7 +573,7 @@
       function startLevel(level) {
         const building = buildings.find(item => item.level === level);
         const highestUnlocked = Math.max(0, ...unlockedLevels);
-        if (!building) {
+        if (!building || (level > highestUnlocked + 1 && !unlockedLevels.has(level))) {
           console.warn(`U-pic cannot start locked Level ${level}.`);
           return;
         }
@@ -587,13 +587,12 @@
         displayedClueSet = 0;
         displayedClues = pickClues(building, displayedClueSet);
         const swapButton = document.getElementById("swap-button");
-        swapButton.textContent = "⟳ Swap to photos 5–8";
+        swapButton.textContent = "⟳ Swap pictures";
         setStatus("", "");
         createKeyboard();
         document.getElementById("level-badge").setAttribute("aria-label", `Level ${building.level}`);
         document.querySelector("#level-badge .level-number").textContent = String(building.level);
         document.getElementById("puzzle-title").textContent = `Level ${building.level}: ${building.name}`;
-        document.dispatchEvent(new CustomEvent("upic:puzzlestart", { detail: { building } }));
         showPage("game");
       }
 
@@ -604,9 +603,17 @@
         const playButton = document.getElementById("map-play-button");
         const detailsButton = document.getElementById("map-details-button");
         if (!building) {
-          eyebrow.textContent = "Your campus adventure";
-          title.textContent = "Ready to explore?";
-          copy.textContent = "Choose any building and solve its puzzle to bring part of the campus to life.";
+          const doneCount = unlockedLevels.size;
+          if (doneCount >= buildings.length) {
+            eyebrow.textContent = "Campus complete";
+            title.textContent = "🎓 Congratulations on completing the map!";
+            copy.textContent = "You unlocked every building on campus. Tap any building to revisit it, replay a level, or try the trivia and hidden treasures.";
+          } else {
+            const nextLevel = Math.max(0, ...unlockedLevels) + 1;
+            eyebrow.textContent = "Your campus adventure";
+            title.textContent = doneCount ? `${doneCount} of ${buildings.length} buildings unlocked` : "Ready to explore?";
+            copy.textContent = `Choose Level ${nextLevel} and your campus guide will walk there. You can play after they arrive.`;
+          }
           playButton.hidden = true;
           detailsButton.hidden = true;
           document.getElementById("treasure-search-button").hidden = true;
@@ -622,7 +629,7 @@
             ? building.description
             : `🔒 Building information is locked. Solve the ${building.name} picture puzzle to reveal its description and facts.`;
         const nextPlayableLevel = Math.max(0, ...unlockedLevels) + 1;
-        const canPlay = true;
+        const canPlay = unlockedLevels.has(building.level) || building.level === nextPlayableLevel;
         playButton.textContent = unlockedLevels.has(building.level)
           ? `▶  Replay Level ${building.level}`
           : `▶  Play Level ${building.level}`;
@@ -888,7 +895,7 @@
         keyboardSelections = Array(answer().length).fill(null);
         displayedClueSet = 0;
         displayedClues = pickClues(activeBuilding, displayedClueSet);
-        document.getElementById("swap-button").textContent = "⟳ Swap to photos 5–8";
+        document.getElementById("swap-button").textContent = "⟳ Swap pictures";
         selectedMapBuilding = null;
         window.clearTimeout(travelTimer);
         travelSequence += 1;
@@ -908,12 +915,11 @@
         const nextPlayableLevel = Math.max(0, ...unlockedLevels) + 1;
         buildings.forEach(building => {
           const isUnlocked = unlockedLevels.has(building.level);
-          const isPlayable = !isUnlocked;
+          const isPlayable = building.level === nextPlayableLevel && !isUnlocked;
           const button = document.createElement("button");
           button.type = "button";
           const hasExplorationReward = exploredRewardBuildings.has(building.id);
           button.className = `map-hotspot ${isUnlocked ? "unlocked" : isPlayable ? "playable" : "locked"}${hasExplorationReward ? " explored" : ""}`;
-          button.dataset.buildingId = building.id;
           button.style.left = `${building.left}%`;
           button.style.top = `${building.top}%`;
           button.style.width = `${building.width}%`;
@@ -937,7 +943,7 @@
           label.className = "map-hotspot-label";
           label.textContent = hasExplorationReward
             ? `✓ ${building.name}`
-            : isUnlocked ? building.name : isPlayable ? `🧩 ${building.name}` : `🔒 Level ${building.level}`;
+            : isUnlocked ? building.name : isPlayable ? `▶ Level ${building.level}` : `🔒 Level ${building.level}`;
           button.appendChild(label);
           button.addEventListener("click", () => travelToBuilding(building));
           mapNodes.appendChild(button);
@@ -1025,9 +1031,18 @@
         menuToggle.setAttribute("aria-label", "Open menu");
       }
 
+      const slotHelp = document.getElementById("slot-help");
+      const slotHelpDefault = slotHelp ? slotHelp.textContent : "";
       function setStatus(message, kind) {
         status.textContent = message;
         status.className = "status-message" + (kind ? " " + kind : "");
+        // Show guess feedback right under the letter slots too, so it's visible without scrolling on phones.
+        if (slotHelp) {
+          const showHere = kind === "near" || kind === "error";
+          slotHelp.textContent = showHere ? message : slotHelpDefault;
+          slotHelp.classList.toggle("guess-feedback", showHere);
+          slotHelp.classList.toggle("near", kind === "near");
+        }
       }
 
       function resetEnteredLetters() {
@@ -1061,36 +1076,9 @@
         renderKeyboard();
       }
 
-      // Supportive feedback for plausible guesses; matches must fit the letter slots.
-      const relatedGuesses = {
-        reading: ["library", "studies"],
-        mind: ["idea"],
-        study: ["learn"],
-        teach: ["learn"],
-        coding: ["script"],
-        science: ["biology"],
-        events: ["party"],
-        language: ["dialects"]
-      };
-
-      function getNearMissFeedback(guess, solution) {
-        const isRelated = (relatedGuesses[solution] || []).includes(guess);
-        const correctPositions = [...solution].reduce((count, letter, index) =>
-          count + Number(guess[index] === letter), 0);
-        if (isRelated) {
-          return { message: "Good thinking — that's related! Try changing a letter to find the hidden word.", positions: [] };
-        }
-        if (correctPositions >= Math.ceil(solution.length / 2)) {
-          return {
-            message: `So close! ${correctPositions} of ${solution.length} letters are in the right spot. Tap a letter to adjust your guess.`,
-            positions: [...solution].map((letter, index) => guess[index] === letter ? index : -1).filter(index => index !== -1)
-          };
-        }
-        return { message: "Not quite! Even fourth-years get lost sometimes. Try changing a letter or using a hint.", positions: [] };
-      }
-
+      let checkingGuess = false;
       function submitAnswer() {
-        if (levelSolved) return;
+        if (levelSolved || checkingGuess) return;
         const solution = answer();
         const guess = solution.split("").map((letter, index) => hintedLetters[index] || userLetters[index]).join("");
         if (guess.length !== solution.length || guess.split("").some(letter => !letter)) {
@@ -1112,23 +1100,35 @@
           updateArrival(activeBuilding, true);
           document.getElementById("win-title").textContent = activeBuilding.name;
           document.getElementById("win-copy").textContent = earnedHint
-            ? `One less building to get lost in! You completed Level ${activeBuilding.level} and unlocked this campus landmark. You earned 1 bonus hint! You now have ${hints} hint${hints === 1 ? "" : "s"}.`
+            ? `You completed Level ${activeBuilding.level} and unlocked this building on your UVic campus map. You earned 1 bonus hint! You now have ${hints} hint${hints === 1 ? "" : "s"}.`
             : `You completed Level ${activeBuilding.level} and unlocked this building on your UVic campus map. Your hint inventory is full (${hints}/3).`;
           const nextButton = document.getElementById("win-next-button");
           nextButton.hidden = activeBuilding.level === buildings.length;
           nextButton.textContent = `Play Level ${activeBuilding.level + 1}`;
           openModal(winModal);
         } else {
-          // Keep the attempt visible so players can learn from it and edit individual slots.
-          const feedback = getNearMissFeedback(guess, solution);
-          setStatus(feedback.message, feedback.positions.length ? "success" : "error");
-          const currentSlots = [...slots.querySelectorAll(".letter-slot")];
-          feedback.positions.forEach(index => currentSlots[index]?.classList.add("near-match"));
-          if (!feedback.positions.length) {
-            const shell = document.querySelector("#game-page .game-shell");
-            shell.classList.remove("wrong-answer");
-            window.requestAnimationFrame(() => shell.classList.add("wrong-answer"));
-          }
+          // Near-miss feedback (playtest finding): show which letters are already in the right spot
+          // before clearing, so good reasoning is rewarded instead of looking like any wrong answer.
+          const rightSpots = solution.split("").map((letter, index) => guess[index] === letter);
+          const rightCount = rightSpots.filter(Boolean).length;
+          const total = solution.length;
+          let message;
+          if (rightCount === 0) message = "Not quite. None of those letters are in the right spot, so try a different word.";
+          else if (rightCount >= Math.ceil(total / 2)) message = `So close! ${rightCount} of ${total} letters are in the right spot. Keep the same idea and try again.`;
+          else message = `Not quite, but ${rightCount} of ${total} letters ${rightCount === 1 ? "is" : "are"} in the right spot. Try again.`;
+          setStatus(message, rightCount >= Math.ceil(total / 2) ? "near" : "error");
+          checkingGuess = true;
+          [...slots.children].forEach((slot, index) => slot.classList.add(rightSpots[index] ? "right-spot" : "wrong-spot"));
+          keyboard.classList.add("checking");
+          const shell = document.querySelector("#game-page .game-shell");
+          shell.classList.remove("wrong-answer");
+          window.requestAnimationFrame(() => shell.classList.add("wrong-answer"));
+          window.setTimeout(() => {
+            checkingGuess = false;
+            keyboard.classList.remove("checking");
+            if (levelSolved) return;
+            resetEnteredLetters();
+          }, 1500);
         }
       }
 
@@ -1138,10 +1138,10 @@
         displayedClues = pickClues(activeBuilding, displayedClueSet);
         resetEnteredLetters();
         const swapButton = document.getElementById("swap-button");
-        swapButton.textContent = displayedClueSet === 0 ? "⟳ Swap to photos 5–8" : "⟳ Swap to photos 1–4";
+        swapButton.textContent = "⟳ Swap pictures";
         playTone(440);
         renderPuzzle();
-        setStatus(displayedClueSet === 1 ? "Showing the other four photos (5–8). The answer stays the same." : "Back to the first four photos (1–4). The answer stays the same.", "");
+        setStatus("New pictures! The answer stays the same.", "");
       }
 
       function openModal(modal) {
@@ -1306,7 +1306,20 @@
         openModal,
         closeModal,
         showPage,
-        closeMenu
+        closeMenu,
+        trivia: campusTrivia,
+        hintCount: () => hints,
+        addHint: () => {
+          if (hints >= 3) return false;
+          hints += 1;
+          saveHintState();
+          document.getElementById("hint-count").textContent = String(hints);
+          document.getElementById("header-hint-count").textContent = String(hints);
+          hintButton.disabled = hints <= 0;
+          return true;
+        },
+        openActivityModal,
+        activityText
       };
 
       activeBuilding = buildings[0];
