@@ -8,6 +8,8 @@
   const MAP_ASPECT = 1094 / 768;          // displayed map proportions (matches style.css)
   const CARD_ASPECT = 4 / 3;              // wallet card picture proportions
   const walletKey = "u-pic-wallet-v1";
+  const stampKey = "u-pic-campus-missions-v3";
+  const getStamps = () => { try { const s=JSON.parse(localStorage.getItem(stampKey)||"[]"); return Array.isArray(s) ? s : []; } catch (_) { return []; } };
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const total = api.buildings.length;
   // Team decision (playtest): keep the grey-to-colour map + celebration, hide the Campus Passport collection.
@@ -205,7 +207,7 @@
     const card = el(owned ? "button" : "div", `wallet-card${owned ? " owned" : " missing"}${big ? " big" : ""}`);
     if (owned) {
       card.type = "button";
-      card.setAttribute("aria-label", `${b.name}, passport stamp ${b.level} of ${total}. Open building information.`);
+      card.setAttribute("aria-label", `${b.name}, ${getStamps().includes(b.id) ? "discovery mission completed" : "discovery mission available"}. Open building information.`);
     } else {
       card.setAttribute("aria-label", `Map piece ${b.level} of ${total}, not collected yet.`);
     }
@@ -220,7 +222,7 @@
     body.appendChild(el("span", "wallet-card-date", owned ? formatDate(collected[b.id]) : `Solve Level ${b.level} to collect`));
     card.append(art, badge, body);
     if (owned) {
-      card.appendChild(el("span", "wallet-card-stamp", "UVic ✓"));
+      card.appendChild(el("span", "wallet-card-stamp", getStamps().includes(b.id) ? "🧭 Stamp ✓" : "🧭 Find me"));
       card.addEventListener("click", () => {
         playFlip();
         closeWallet();
@@ -392,6 +394,12 @@
     modal.querySelector(".wallet-meter-fill").style.width = `${(count / total) * 100}%`;
     renderMapColour();
   }
+
+  document.addEventListener("upic:missioncomplete", () => {
+    renderWallet();
+    if (SHOW_COLLECTION) launcher.classList.add("bump");
+    window.setTimeout(() => launcher.classList.remove("bump"), 700);
+  });
 
   function openWallet() {
     renderWallet();
