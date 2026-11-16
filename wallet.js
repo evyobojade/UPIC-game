@@ -1,4 +1,4 @@
-/* U-pic — Map Pieces collection (code name: wallet), grey-to-colour map reveal, and win celebrations.
+/* U-pic — Campus Passport collection (code name: wallet), grey-to-colour map reveal, and win celebrations.
    Builds on script.js through window.UPic and the upic:* events it fires. */
 (() => {
   "use strict";
@@ -10,9 +10,9 @@
   const walletKey = "u-pic-wallet-v1";
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const total = api.buildings.length;
-  // Team decision (playtest): keep the grey-to-colour map + celebration, hide the Map Pieces collection.
+  // Team decision (playtest): keep the grey-to-colour map + celebration, hide the Campus Passport collection.
   // Set to true to bring back the collection button, menu item and screen.
-  const SHOW_COLLECTION = false;
+  const SHOW_COLLECTION = true;
 
   let collected = {};                      // building id -> ISO date collected
   try { collected = JSON.parse(localStorage.getItem(walletKey) || "{}") || {}; } catch (e) { collected = {}; }
@@ -205,7 +205,7 @@
     const card = el(owned ? "button" : "div", `wallet-card${owned ? " owned" : " missing"}${big ? " big" : ""}`);
     if (owned) {
       card.type = "button";
-      card.setAttribute("aria-label", `${b.name}, map piece ${b.level} of ${total}. Open building information.`);
+      card.setAttribute("aria-label", `${b.name}, passport stamp ${b.level} of ${total}. Open building information.`);
     } else {
       card.setAttribute("aria-label", `Map piece ${b.level} of ${total}, not collected yet.`);
     }
@@ -235,8 +235,8 @@
   const launcher = el("button", "wallet-launcher");
   launcher.type = "button";
   launcher.id = "wallet-open";
-  launcher.innerHTML = `🧩<span class="wallet-label"> Map Pieces</span> <span id="wallet-count">0/${total}</span>`;
-  launcher.setAttribute("aria-label", "Open your Map Pieces collection");
+  launcher.innerHTML = `🧩<span class="wallet-label"> Campus Passport</span> <span id="wallet-count">0/${total}</span>`;
+  launcher.setAttribute("aria-label", "Open your Campus Passport collection");
   // Top bar HUD: progress counters + wallet, so nothing sits on top of the campus map.
   const topbar = document.querySelector(".topbar");
   const hud = el("div", "map-hud");
@@ -343,7 +343,7 @@
 
   const menuPanel = document.getElementById("menu-panel");
   if (menuPanel && SHOW_COLLECTION) {
-    const item = el("button", null, "Map Pieces");
+    const item = el("button", null, "Campus Passport");
     item.type = "button";
     item.setAttribute("role", "menuitem");
     item.addEventListener("click", () => { api.closeMenu(); openWallet(); });
@@ -358,11 +358,11 @@
   modal.setAttribute("aria-hidden", "true");
   modal.innerHTML = `
     <div class="wallet-sheet">
-      <button class="modal-close wallet-close" type="button" aria-label="Close Map Pieces">×</button>
+      <button class="modal-close wallet-close" type="button" aria-label="Close Campus Passport">×</button>
       <header class="wallet-head">
         <div>
           <p class="eyebrow">Your collection</p>
-          <h2 id="wallet-title">Map Pieces</h2>
+          <h2 id="wallet-title">Campus Passport</h2>
           <p class="wallet-sub" id="wallet-sub"></p>
         </div>
         <div class="wallet-mini" aria-hidden="true">
@@ -386,7 +386,7 @@
     grid.replaceChildren(...api.buildings.map(b => makeCard(b)));
     document.getElementById("wallet-sub").textContent = count === total
       ? "Every piece collected. Your whole campus is in colour!"
-      : `${count} of ${total} map pieces collected. Each piece you collect brings that part of campus back into colour.`;
+      : `${count} of ${total} campus passport stamps collected. Each piece you collect brings that part of campus back into colour.`;
     const meter = modal.querySelector(".wallet-meter");
     meter.setAttribute("aria-valuenow", String(count));
     modal.querySelector(".wallet-meter-fill").style.width = `${(count / total) * 100}%`;
@@ -425,7 +425,7 @@
     const note = el("p", "wallet-reward-note", "");
     note.id = "wallet-reward-note";
     title.after(note);
-    openWalletBtn = el("button", "button secondary wallet-win-open", "🧩 See my Map Pieces");
+    openWalletBtn = el("button", "button secondary wallet-win-open", "🧩 See my Campus Passport");
     openWalletBtn.type = "button";
     if (SHOW_COLLECTION) winCard.querySelector(".win-actions").appendChild(openWalletBtn);
     openWalletBtn.addEventListener("click", () => {
@@ -491,7 +491,7 @@
       rewardSlot.replaceChildren(card);
       const remaining = total - api.unlockedCount();
       document.getElementById("wallet-reward-note").textContent = SHOW_COLLECTION
-        ? (remaining ? `Map piece ${b.level} collected. ${remaining} to go!` : "The final map piece! Your campus map is complete.")
+        ? (remaining ? `Map piece ${b.level} collected. ${remaining} to go!` : "The final passport stamp! Your campus map is complete.")
         : (remaining ? `This part of campus is back in colour. ${remaining} building${remaining === 1 ? "" : "s"} to go!` : "Every building unlocked. The whole campus is back in colour!");
     }
     confetti();
