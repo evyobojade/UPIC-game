@@ -573,7 +573,7 @@
       function startLevel(level) {
         const building = buildings.find(item => item.level === level);
         const highestUnlocked = Math.max(0, ...unlockedLevels);
-        if (!building || (level > highestUnlocked + 1 && !unlockedLevels.has(level))) {
+        if (!building) {
           console.warn(`U-pic cannot start locked Level ${level}.`);
           return;
         }
@@ -593,6 +593,7 @@
         document.getElementById("level-badge").setAttribute("aria-label", `Level ${building.level}`);
         document.querySelector("#level-badge .level-number").textContent = String(building.level);
         document.getElementById("puzzle-title").textContent = `Level ${building.level}: ${building.name}`;
+        document.dispatchEvent(new CustomEvent("upic:puzzlestart", { detail: { building } }));
         showPage("game");
       }
 
@@ -605,7 +606,7 @@
         if (!building) {
           eyebrow.textContent = "Your campus adventure";
           title.textContent = "Ready to explore?";
-          copy.textContent = "Choose Level 1 and your campus guide will walk there. You can play after they arrive.";
+          copy.textContent = "Choose any building and solve its puzzle to bring part of the campus to life.";
           playButton.hidden = true;
           detailsButton.hidden = true;
           document.getElementById("treasure-search-button").hidden = true;
@@ -621,7 +622,7 @@
             ? building.description
             : `🔒 Building information is locked. Solve the ${building.name} picture puzzle to reveal its description and facts.`;
         const nextPlayableLevel = Math.max(0, ...unlockedLevels) + 1;
-        const canPlay = unlockedLevels.has(building.level) || building.level === nextPlayableLevel;
+        const canPlay = true;
         playButton.textContent = unlockedLevels.has(building.level)
           ? `▶  Replay Level ${building.level}`
           : `▶  Play Level ${building.level}`;
@@ -907,11 +908,12 @@
         const nextPlayableLevel = Math.max(0, ...unlockedLevels) + 1;
         buildings.forEach(building => {
           const isUnlocked = unlockedLevels.has(building.level);
-          const isPlayable = building.level === nextPlayableLevel && !isUnlocked;
+          const isPlayable = !isUnlocked;
           const button = document.createElement("button");
           button.type = "button";
           const hasExplorationReward = exploredRewardBuildings.has(building.id);
           button.className = `map-hotspot ${isUnlocked ? "unlocked" : isPlayable ? "playable" : "locked"}${hasExplorationReward ? " explored" : ""}`;
+          button.dataset.buildingId = building.id;
           button.style.left = `${building.left}%`;
           button.style.top = `${building.top}%`;
           button.style.width = `${building.width}%`;
@@ -935,7 +937,7 @@
           label.className = "map-hotspot-label";
           label.textContent = hasExplorationReward
             ? `✓ ${building.name}`
-            : isUnlocked ? building.name : isPlayable ? `▶ Level ${building.level}` : `🔒 Level ${building.level}`;
+            : isUnlocked ? building.name : isPlayable ? `🧩 ${building.name}` : `🔒 Level ${building.level}`;
           button.appendChild(label);
           button.addEventListener("click", () => travelToBuilding(building));
           mapNodes.appendChild(button);
@@ -1076,7 +1078,7 @@
         const correctPositions = [...solution].reduce((count, letter, index) =>
           count + Number(guess[index] === letter), 0);
         if (isRelated) {
-          return { message: "Good thinking — that's related! Tap a letter to try another answer.", positions: [] };
+          return { message: "Good thinking — that's related! Try changing a letter to find the hidden word.", positions: [] };
         }
         if (correctPositions >= Math.ceil(solution.length / 2)) {
           return {
@@ -1084,7 +1086,7 @@
             positions: [...solution].map((letter, index) => guess[index] === letter ? index : -1).filter(index => index !== -1)
           };
         }
-        return { message: "Not quite! Tap a filled letter to change your guess, or use a hint.", positions: [] };
+        return { message: "Not quite! Even fourth-years get lost sometimes. Try changing a letter or using a hint.", positions: [] };
       }
 
       function submitAnswer() {
@@ -1110,7 +1112,7 @@
           updateArrival(activeBuilding, true);
           document.getElementById("win-title").textContent = activeBuilding.name;
           document.getElementById("win-copy").textContent = earnedHint
-            ? `You completed Level ${activeBuilding.level} and unlocked this building on your UVic campus map. You earned 1 bonus hint! You now have ${hints} hint${hints === 1 ? "" : "s"}.`
+            ? `One less building to get lost in! You completed Level ${activeBuilding.level} and unlocked this campus landmark. You earned 1 bonus hint! You now have ${hints} hint${hints === 1 ? "" : "s"}.`
             : `You completed Level ${activeBuilding.level} and unlocked this building on your UVic campus map. Your hint inventory is full (${hints}/3).`;
           const nextButton = document.getElementById("win-next-button");
           nextButton.hidden = activeBuilding.level === buildings.length;
