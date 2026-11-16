@@ -69,13 +69,16 @@ Players may choose any of the eight UVic building puzzles in any order. The puzz
 
 On solving a word puzzle, a building becomes coloured on the campus map and a collectible Campus Passport card becomes available. The level-complete screen offers **Find this building**, which opens a three-choice visual map-identification mission. Correct identification earns the building's **discovery stamp** (and a bonus hint when room is available), and presents a building fact. The wrong choice can be retried without penalty. All eight mission stamps are tracked in the browser independently of puzzle unlocks. There is no live GPS or routing.
 
-The existing grey-to-colour map effects, audio settings, confetti, and level data are retained. Only three external building photos are available in this version; photo links require a network connection.
+The existing grey-to-colour map effects, audio settings, confetti, and level data are retained. Six licensed exterior building photos are available in this version; the remaining two buildings use the illustrated map. Photo links require a network connection.
 
 ### Exterior photo credits
 
 - [McPherson Library photograph](https://commons.wikimedia.org/wiki/File:UVic_McPherson_Library.jpg), Thedarkempire, CC BY-SA 4.0.
 - [Clearihue Building photograph](https://commons.wikimedia.org/wiki/File:UVic_Clearihue_Building.jpg), Tloren5, CC BY-SA 4.0.
 - [ECS Building photograph](https://commons.wikimedia.org/wiki/File:UVic_ECS_Building.png), Thedarkempire, CC BY-SA 4.0.
+- [David Strong Building photograph](https://commons.wikimedia.org/wiki/File:David_Strong_building_East_side._READ_MORE_IN_PANORAMIO-COMMENT_-_panoramio.jpg), John Newcomb, CC BY 3.0.
+- [Bob Wright Centre photograph](https://commons.wikimedia.org/wiki/File:Bob_Wright_Centre_for_Ocean_Earth_and_Atmosphere_Sciences._READ_INFO_IN_PANORAMIO-COMMENTS_-_panoramio.jpg), John Newcomb, CC BY 3.0.
+- [Jamie Cassels Centre (formerly University Centre) photograph](https://commons.wikimedia.org/wiki/File:University_Centre._READ_MORE_IN_PANORAMIO-COMMENT_-_panoramio.jpg), John Newcomb, CC BY 3.0.
 
 The puzzle includes clickable photo credits leading to licence information.
 
