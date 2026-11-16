@@ -1,4 +1,4 @@
-/* U-pic — Campus Wallet, grey-to-colour map reveal, and win celebrations.
+/* U-pic — Campus Passport, grey-to-colour map reveal, and win celebrations.
    Builds on script.js through window.UPic and the upic:* events it fires. */
 (() => {
   "use strict";
@@ -232,15 +232,15 @@
   const launcher = el("button", "wallet-launcher");
   launcher.type = "button";
   launcher.id = "wallet-open";
-  launcher.innerHTML = `👛<span class="wallet-label"> Campus Wallet</span> <span id="wallet-count">0/${total}</span>`;
-  launcher.setAttribute("aria-label", "Open Campus Wallet");
+  launcher.innerHTML = `📘<span class="wallet-label"> Campus Passport</span> <span id="wallet-count">0/${total}</span>`;
+  launcher.setAttribute("aria-label", "Open Campus Passport");
   // The wallet button sits on the map itself (the activity strip above the map is hidden in v14.2+).
   if (campusMap) campusMap.appendChild(launcher);
   else if (dock) dock.prepend(launcher);
 
   const menuPanel = document.getElementById("menu-panel");
   if (menuPanel) {
-    const item = el("button", null, "Campus Wallet");
+    const item = el("button", null, "Campus Passport");
     item.type = "button";
     item.setAttribute("role", "menuitem");
     item.addEventListener("click", () => { api.closeMenu(); openWallet(); });
@@ -255,11 +255,11 @@
   modal.setAttribute("aria-hidden", "true");
   modal.innerHTML = `
     <div class="wallet-sheet">
-      <button class="modal-close wallet-close" type="button" aria-label="Close Campus Wallet">×</button>
+      <button class="modal-close wallet-close" type="button" aria-label="Close Campus Passport">×</button>
       <header class="wallet-head">
         <div>
           <p class="eyebrow">Your collection</p>
-          <h2 id="wallet-title">Campus Wallet</h2>
+          <h2 id="wallet-title">Campus Passport</h2>
           <p class="wallet-sub" id="wallet-sub"></p>
         </div>
         <div class="wallet-mini" aria-hidden="true">
@@ -322,7 +322,7 @@
     const note = el("p", "wallet-reward-note", "");
     note.id = "wallet-reward-note";
     title.after(note);
-    openWalletBtn = el("button", "button secondary wallet-win-open", "👛 Open Campus Wallet");
+    openWalletBtn = el("button", "button secondary wallet-win-open", "👛 Open Campus Passport");
     openWalletBtn.type = "button";
     winCard.querySelector(".win-actions").appendChild(openWalletBtn);
     openWalletBtn.addEventListener("click", () => {
@@ -388,8 +388,8 @@
       rewardSlot.replaceChildren(card);
       const remaining = total - api.unlockedCount();
       document.getElementById("wallet-reward-note").textContent = remaining
-        ? `Map piece ${b.level} added to your Campus Wallet. ${remaining} to go!`
-        : "The final map piece! Your Campus Wallet is complete.";
+        ? `Map piece ${b.level} added to your Campus Passport. ${remaining} to go!`
+        : "The final map piece! Your Campus Passport is complete.";
     }
     confetti();
     playFanfare(api.unlockedCount() === total);
