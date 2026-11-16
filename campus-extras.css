@@ -1,0 +1,10 @@
+.campus-photo-spot{display:flex;align-items:center;gap:12px;margin:10px auto 0;padding:8px 12px;width:min(560px,100%);border:1px solid #b7cfe3;border-radius:14px;background:#f4f9ff;color:#123d70;}
+.campus-photo-spot[hidden]{display:none;}
+.campus-photo-spot img{width:86px;height:58px;object-fit:cover;border-radius:9px;flex:none;}
+.campus-photo-text{display:flex;flex-direction:column;gap:3px;font-size:12px;line-height:1.3;}
+.campus-photo-text strong{font-size:13px;}
+.campus-challenge{margin:12px 0;padding:15px 18px;border:2px solid #d5e6f4;border-radius:16px;background:#f8fbff;color:#123d70;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.campus-challenge strong{font-weight:850;flex:1 1 100%;}
+.campus-challenge p{flex:1 1 240px;margin:0;font-size:14px;}
+.campus-challenge button{flex:0 0 auto;}
+@media(max-width:600px){.campus-photo-spot{padding:6px 8px;}.campus-photo-spot img{width:64px;height:52px;}.campus-challenge{padding:12px;}.campus-challenge button{width:100%;}}
