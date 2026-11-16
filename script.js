@@ -1059,6 +1059,34 @@
         renderKeyboard();
       }
 
+      // Supportive feedback for plausible guesses; matches must fit the letter slots.
+      const relatedGuesses = {
+        reading: ["library", "studies"],
+        mind: ["idea"],
+        study: ["learn"],
+        teach: ["learn"],
+        coding: ["script"],
+        science: ["biology"],
+        events: ["party"],
+        language: ["dialects"]
+      };
+
+      function getNearMissFeedback(guess, solution) {
+        const isRelated = (relatedGuesses[solution] || []).includes(guess);
+        const correctPositions = [...solution].reduce((count, letter, index) =>
+          count + Number(guess[index] === letter), 0);
+        if (isRelated) {
+          return { message: "Good thinking — that's related! Tap a letter to try another answer.", positions: [] };
+        }
+        if (correctPositions >= Math.ceil(solution.length / 2)) {
+          return {
+            message: `So close! ${correctPositions} of ${solution.length} letters are in the right spot. Tap a letter to adjust your guess.`,
+            positions: [...solution].map((letter, index) => guess[index] === letter ? index : -1).filter(index => index !== -1)
+          };
+        }
+        return { message: "Not quite! Tap a filled letter to change your guess, or use a hint.", positions: [] };
+      }
+
       function submitAnswer() {
         if (levelSolved) return;
         const solution = answer();
@@ -1089,11 +1117,16 @@
           nextButton.textContent = `Play Level ${activeBuilding.level + 1}`;
           openModal(winModal);
         } else {
-          resetEnteredLetters();
-          setStatus("Not quite — your letters are cleared. Try another combination.", "error");
-          const shell = document.querySelector("#game-page .game-shell");
-          shell.classList.remove("wrong-answer");
-          window.requestAnimationFrame(() => shell.classList.add("wrong-answer"));
+          // Keep the attempt visible so players can learn from it and edit individual slots.
+          const feedback = getNearMissFeedback(guess, solution);
+          setStatus(feedback.message, feedback.positions.length ? "success" : "error");
+          const currentSlots = [...slots.querySelectorAll(".letter-slot")];
+          feedback.positions.forEach(index => currentSlots[index]?.classList.add("near-match"));
+          if (!feedback.positions.length) {
+            const shell = document.querySelector("#game-page .game-shell");
+            shell.classList.remove("wrong-answer");
+            window.requestAnimationFrame(() => shell.classList.add("wrong-answer"));
+          }
         }
       }
 
