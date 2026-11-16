@@ -1,4 +1,4 @@
-/* U-pic — Campus Passport collection (code name: wallet), grey-to-colour map reveal, and win celebrations.
+/* U-pic — Map Pieces collection (code name: wallet), grey-to-colour map reveal, and win celebrations.
    Builds on script.js through window.UPic and the upic:* events it fires. */
 (() => {
   "use strict";
@@ -8,12 +8,9 @@
   const MAP_ASPECT = 1094 / 768;          // displayed map proportions (matches style.css)
   const CARD_ASPECT = 4 / 3;              // wallet card picture proportions
   const walletKey = "u-pic-wallet-v1";
-  const stampKey = "u-pic-campus-missions-v3";
-  const getStamps = () => { try { const s=JSON.parse(localStorage.getItem(stampKey)||"[]"); return Array.isArray(s) ? s : []; } catch (_) { return []; } };
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const total = api.buildings.length;
-  // Team decision (playtest): keep the grey-to-colour map + celebration, hide the Campus Passport collection.
-  // Set to true to bring back the collection button, menu item and screen.
+  // Map Pieces collection (Evidence's idea): set to false to hide the collection button, menu item and screen.
   const SHOW_COLLECTION = true;
 
   let collected = {};                      // building id -> ISO date collected
@@ -207,22 +204,38 @@
     const card = el(owned ? "button" : "div", `wallet-card${owned ? " owned" : " missing"}${big ? " big" : ""}`);
     if (owned) {
       card.type = "button";
-      card.setAttribute("aria-label", `${b.name}, ${getStamps().includes(b.id) ? "discovery mission completed" : "discovery mission available"}. Open building information.`);
+      card.setAttribute("aria-label", `${b.name}, map piece ${b.level} of ${total}. Open building information.`);
     } else {
       card.setAttribute("aria-label", `Map piece ${b.level} of ${total}, not collected yet.`);
     }
     const art = el("div", "wallet-card-art");
+    // Locked Passport cards stay as grey map fragments. Once a puzzle is solved,
+    // show the matching real UVic building photo rather than the map fragment.
     art.setAttribute("style", pieceStyle(b));
+    if (owned && b.photo && b.photo.image) {
+      const image = el("img", "wallet-building-photo");
+      image.src = b.photo.image;
+      image.alt = `Exterior of ${b.name}`;
+      image.loading = big ? "eager" : "lazy";
+      image.addEventListener("error", () => {
+        // Keep the original campus-map art visible if a third-party photo fails.
+        image.remove();
+        art.classList.remove("has-building-photo");
+      }, { once: true });
+      art.classList.add("has-building-photo");
+      art.appendChild(image);
+    }
     if (!owned) art.appendChild(el("span", "wallet-card-question", "?"));
     const badge = el("span", "wallet-card-badge", owned ? b.icon : "🔒");
     badge.setAttribute("aria-hidden", "true");
     const body = el("div", "wallet-card-body");
-    body.appendChild(el("span", "wallet-card-level", SHOW_COLLECTION ? `Piece ${b.level} / ${total}` : `Level ${b.level} · Unlocked`));
+    body.appendChild(el("span", "wallet-card-level", SHOW_COLLECTION ? `Stamp ${b.level} / ${total}` : `Level ${b.level} · Unlocked`));
     body.appendChild(el("strong", "wallet-card-name", owned ? b.name : "Not found yet"));
     body.appendChild(el("span", "wallet-card-date", owned ? formatDate(collected[b.id]) : `Solve Level ${b.level} to collect`));
     card.append(art, badge, body);
     if (owned) {
-      card.appendChild(el("span", "wallet-card-stamp", getStamps().includes(b.id) ? "🧭 Stamp ✓" : "🧭 Find me"));
+      card.appendChild(el("span", "wallet-card-stamp", "UVic ✓"));
+      if (window.UPicDiscovery && window.UPicDiscovery.isDiscovered(b.id)) card.appendChild(el("span", "wallet-card-found", "📍 Found on map"));
       card.addEventListener("click", () => {
         playFlip();
         closeWallet();
@@ -237,8 +250,8 @@
   const launcher = el("button", "wallet-launcher");
   launcher.type = "button";
   launcher.id = "wallet-open";
-  launcher.innerHTML = `🧩<span class="wallet-label"> Campus Passport</span> <span id="wallet-count">0/${total}</span>`;
-  launcher.setAttribute("aria-label", "Open your Campus Passport collection");
+  launcher.innerHTML = `📘<span class="wallet-label"> Passport</span> <span id="wallet-count">0/${total}</span>`;
+  launcher.setAttribute("aria-label", "Open your Campus Passport");
   // Top bar HUD: progress counters + wallet, so nothing sits on top of the campus map.
   const topbar = document.querySelector(".topbar");
   const hud = el("div", "map-hud");
@@ -248,7 +261,6 @@
   const statHints = el("span", "map-hud-stat");
   statHints.title = "Discovery hints collected";
   hud.append(statBuildings, statHints);
-  if (SHOW_COLLECTION) hud.append(launcher);
 
   /* ---------- Trivia for hints (top bar): up to 3 hints per hour ---------- */
   const TRIVIA_HINTS_PER_HOUR = 3;
@@ -330,6 +342,7 @@
     api.openActivityModal("Trivia for hints", "Learn something about UVic", content);
   }
   triviaBtn.addEventListener("click", openTopTrivia);
+  if (SHOW_COLLECTION) hud.append(launcher);
   if (topbar) topbar.appendChild(hud);
   else if (campusMap) campusMap.appendChild(launcher);
   const syncStats = () => {
@@ -387,19 +400,13 @@
     const grid = document.getElementById("wallet-grid");
     grid.replaceChildren(...api.buildings.map(b => makeCard(b)));
     document.getElementById("wallet-sub").textContent = count === total
-      ? "Every piece collected. Your whole campus is in colour!"
-      : `${count} of ${total} campus passport stamps collected. Each piece you collect brings that part of campus back into colour.`;
+      ? "Every stamp collected. Your whole campus is in colour!"
+      : `${count} of ${total} stamps collected. Solve a building to stamp it; find it on the map to earn 📍.`;
     const meter = modal.querySelector(".wallet-meter");
     meter.setAttribute("aria-valuenow", String(count));
     modal.querySelector(".wallet-meter-fill").style.width = `${(count / total) * 100}%`;
     renderMapColour();
   }
-
-  document.addEventListener("upic:missioncomplete", () => {
-    renderWallet();
-    if (SHOW_COLLECTION) launcher.classList.add("bump");
-    window.setTimeout(() => launcher.classList.remove("bump"), 700);
-  });
 
   function openWallet() {
     renderWallet();
@@ -433,7 +440,7 @@
     const note = el("p", "wallet-reward-note", "");
     note.id = "wallet-reward-note";
     title.after(note);
-    openWalletBtn = el("button", "button secondary wallet-win-open", "🧩 See my Campus Passport");
+    openWalletBtn = el("button", "button secondary wallet-win-open", "📘 Open my Campus Passport");
     openWalletBtn.type = "button";
     if (SHOW_COLLECTION) winCard.querySelector(".win-actions").appendChild(openWalletBtn);
     openWalletBtn.addEventListener("click", () => {
@@ -499,7 +506,7 @@
       rewardSlot.replaceChildren(card);
       const remaining = total - api.unlockedCount();
       document.getElementById("wallet-reward-note").textContent = SHOW_COLLECTION
-        ? (remaining ? `Map piece ${b.level} collected. ${remaining} to go!` : "The final passport stamp! Your campus map is complete.")
+        ? (remaining ? `Look at you! One less building to get lost in. Stamp added to your Campus Passport, ${remaining} to go.` : "Every stamp collected! You officially know campus better than some upper-year students.")
         : (remaining ? `This part of campus is back in colour. ${remaining} building${remaining === 1 ? "" : "s"} to go!` : "Every building unlocked. The whole campus is back in colour!");
     }
     confetti();

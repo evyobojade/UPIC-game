@@ -227,3 +227,72 @@ body:has(#map-page.active):not(:has(#game-page.active)) .map-hud {
 #game-page #slot-help.guess-feedback { color: #b6473d !important; font-weight: 800 !important; }
 #game-page #slot-help.guess-feedback.near { color: #17603f !important; }
 #game-page #slot-help.guess-feedback ~ * #status-message, #game-page .status-message.near, #game-page .status-message.error { display: none !important; }
+
+/* ---------- Map Pieces screen fits on one laptop screen ---------- */
+.wallet-sheet { max-height: calc(100svh - 24px) !important; padding: 20px 24px 22px !important; }
+.wallet-head { margin-bottom: 8px; }
+.wallet-head h2 { font-size: clamp(22px, 3vw, 28px); margin-bottom: 2px; }
+.wallet-mini { width: clamp(100px, 13vw, 150px); }
+.wallet-meter { margin: 4px 0 14px; }
+.wallet-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.wallet-card-art { aspect-ratio: 16 / 9; }
+.wallet-card-body { padding: 7px 10px 9px; }
+.wallet-card-name { font-size: 13px; }
+.wallet-card-badge { width: 28px; height: 28px; top: 7px; left: 7px; font-size: 15px; border-radius: 9px; }
+.wallet-card-stamp { top: 8px; font-size: 10px; }
+@media (max-width: 560px) {
+  .wallet-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .wallet-mini { display: none; }
+}
+
+/* ---------- Discovery challenges + navigation missions ---------- */
+#campus-map .discovery-panel {
+  position: absolute; z-index: 6; left: 12px; right: 12px; bottom: 12px;
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 6px 14px;
+  padding: 10px 14px; border: 2px solid #ffc629; border-radius: 16px; background: rgb(255 253 246 / 97%);
+  box-shadow: 0 10px 30px rgb(18 61 112 / 25%); animation: discoveryIn .35s cubic-bezier(.2,.9,.3,1.2) both;
+}
+#campus-map .discovery-panel[hidden] { display: none; }
+#campus-map .discovery-panel.solved { border-color: #2a9464; }
+@keyframes discoveryIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+.discovery-eyebrow { margin: 0 0 2px; color: #a06d00; font-size: 11px; font-weight: 900; letter-spacing: .05em; text-transform: uppercase; }
+.discovery-panel h3 { margin: 0; color: #123d70; font-size: clamp(14px, 1.6vw, 17px); font-weight: 900; line-height: 1.3; }
+.discovery-feedback { margin: 3px 0 0; color: #4c5f76; font-size: 13px; font-weight: 650; line-height: 1.4; }
+.discovery-feedback.wrong { color: #b6473d; }
+.discovery-feedback.right { color: #17603f; font-weight: 800; }
+.discovery-actions { display: flex; gap: 6px; }
+.discovery-actions button { height: 34px; padding: 0 14px; border: 1px solid #dce5ef; border-radius: 999px; background: #fff; color: #123d70; font: inherit; font-size: 12px; font-weight: 850; cursor: pointer; box-shadow: 0 3px 0 #dce5ef; }
+.discovery-actions .discovery-show { border-color: #f0d27a; background: #fff3cc; }
+.discovery-panel.solved .discovery-skip { border-color: #2a9464; background: #2a9464; color: #fff; box-shadow: 0 3px 0 #1d6e4a; }
+#map-page .map-arrival.discovery-hidden { visibility: hidden !important; }
+.map-hotspot.challenge-option { border-color: #ffc629 !important; box-shadow: 0 0 0 4px rgb(255 198 41 / 45%), 0 0 22px rgb(255 198 41 / 70%) !important; animation: optionPulse 1.4s ease-in-out infinite; z-index: 3; }
+@keyframes optionPulse { 50% { box-shadow: 0 0 0 9px rgb(255 198 41 / 18%), 0 0 30px rgb(255 198 41 / 45%); } }
+.map-hotspot .challenge-tag { position: absolute; top: -10px; left: 50%; display: grid; width: 30px; height: 30px; place-items: center; border: 3px solid #fff; border-radius: 50%; background: #123d70; color: #ffc629; font-size: 15px; font-weight: 950; transform: translateX(-50%); box-shadow: 0 4px 10px rgb(0 0 0 / 30%); pointer-events: none; }
+.map-hotspot.challenge-answer { border-color: #2a9464 !important; box-shadow: 0 0 0 5px rgb(42 148 100 / 45%), 0 0 26px rgb(42 148 100 / 80%) !important; animation: optionPulse 1s ease-in-out infinite; }
+.map-hotspot.challenge-wrong { animation: wrongShake .4s ease; }
+@keyframes wrongShake { 25% { translate: -5px 0; } 75% { translate: 5px 0; } }
+.wallet-card-found { position: absolute; top: 34px; right: -2px; padding: 3px 10px 3px 8px; border: 2px solid #fff; border-radius: 999px 0 0 999px; background: #123d70; color: #ffc629; font-size: 10px; font-weight: 900; box-shadow: 0 3px 8px rgb(0 0 0 / 18%); }
+#game-page .slot-progress { margin: 2px 0 0; color: #6b7888; font-size: 12px; font-weight: 750; text-align: center; }
+@media (max-width: 899px) {
+  #campus-map .discovery-panel { position: fixed; z-index: 50; left: 10px; right: 10px; bottom: 12px; grid-template-columns: 1fr; padding: 10px 12px; gap: 8px; }
+  .discovery-panel h3 { font-size: 13px; }
+  .discovery-feedback { font-size: 12px; }
+  .discovery-actions button { height: 30px; }
+  .map-hotspot .challenge-tag { width: 22px; height: 22px; font-size: 12px; border-width: 2px; top: -6px; }
+}
+@media (prefers-reduced-motion: reduce) { .map-hotspot.challenge-option, .map-hotspot.challenge-answer, .discovery-panel { animation: none !important; } }
+
+/* Real building photographs on unlocked Campus Passport cards */
+.wallet-card-art.has-building-photo { overflow: hidden; background-color: #e4edf3; }
+.wallet-building-photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+  object-fit: cover;
+  object-position: center;
+  z-index: 0;
+}
+.wallet-card.missing .wallet-card-art .wallet-building-photo { display: none; }
+.wallet-card.owned .wallet-card-art.has-building-photo::after { z-index: 1; pointer-events: none; }

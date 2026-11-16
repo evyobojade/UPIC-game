@@ -95,62 +95,71 @@
         image: `assets/clues/${topic}-${index + 1}.svg`,
         caption
       }));
+      const realBuildingPhoto = (image, caption, credit, source) => ({ image, caption, credit, source });
       const buildings = [
         {
           level: 1, id: "mcpherson", name: "McPherson Library", icon: "📚", left: 68, top: 41, width: 21, height: 16, labelTop: 63,
           answer: "reading",
           clues: clue([11954964, 9158359, 40249095, 9572525, 6550123, 15361558, 10803232, 9572569], ["Reading in a library", "Reading a book", "A quiet library", "Students reading", "Reading beside bookshelves", "People reading together", "Reading in a vintage library", "Reading in a library"] ),
           description: "The McPherson Library is UVic's main library and an important place for study and research. Students can use library collections, research support, study spaces, and resources for their coursework.",
-          facts: ["Books, journals, and digital resources", "Individual and group study", "Research help and learning support"]
+          facts: ["Books, journals, and digital resources", "Individual and group study", "Research help and learning support"],
+          photo: realBuildingPhoto("https://commons.wikimedia.org/wiki/Special:FilePath/UVic_McPherson_Library.jpg?width=900", "Exterior of McPherson Library", "Photo: Thedarkempire · CC BY-SA 4.0", "https://commons.wikimedia.org/wiki/File:UVic_McPherson_Library.jpg")
         },
         {
           level: 2, id: "cornett", name: "Cornett Building", icon: "🧠", left: 10, top: 38, width: 24, height: 16, labelTop: 62,
           answer: "mind",
           clues: illustratedClues("mind", ["A brain and its thoughts", "A thinking face", "A bright idea", "Solving a problem", "The human brain", "A reflective expression", "An idea taking shape", "A problem-solving grid"]),
           description: "The Cornett Building houses academic spaces used by departments in the humanities and social sciences. It is a place where students explore people, behaviour, communication, and ideas.",
-          facts: ["Academic departments and classrooms", "Learning about people and ideas", "Teaching and student study"]
+          facts: ["Academic departments and classrooms", "Learning about people and ideas", "Teaching and student study"],
+          photo: realBuildingPhoto("https://www.uvic.ca/info/_assets/images/content-main/buildings-cornett-720x405.jpg", "Exterior of the Cornett Building", "Photo: University of Victoria", "https://www.uvic.ca/search/buildings/pages/cornett.php")
         },
         {
           level: 3, id: "strong", name: "David Strong Building", icon: "📘", left: 18, top: 22, width: 21, height: 17, labelTop: 61,
           answer: "study",
           clues: clue([8199762, 9572464, 5234735, 6549368, 8197511, 37810244, 8423404, 8199160], ["Students studying", "Library study", "Study partners", "Study materials", "Students in a classroom", "Students collaborating", "Classroom discussion", "Students learning together"]),
           description: "The David Strong Building is an academic building on UVic's campus. Students use campus learning spaces to attend classes, work on assignments, and meet with classmates.",
-          facts: ["Academic and teaching spaces", "Student learning", "A place to work on coursework"]
+          facts: ["Academic and teaching spaces", "Student learning", "A place to work on coursework"],
+          photo: realBuildingPhoto("assets/buildings/david-strong-building.jpg", "Exterior of the David Strong Building", "Photo: University of Victoria", "https://www.uvic.ca/search/buildings/pages/david-strong.php")
         },
         {
           level: 4, id: "maclaurin", name: "MacLaurin Building", icon: "✏️", left: 11, top: 56, width: 22, height: 15, labelTop: 59,
           answer: "teach",
           clues: clue([8923154, 5212342, 5212337, 8617816, 8923076, 8617967, 8923042, 5212335], ["Teacher in class", "Teaching students", "Classroom lesson", "Guiding learners", "Teacher helping students", "Teacher and students", "Teacher guiding a lesson", "Teacher with learners"]),
           description: "The MacLaurin Building is closely associated with education and learning at UVic. It includes spaces used for teaching, studying, and preparing for work in educational settings.",
-          facts: ["Education-related learning", "Teaching and study spaces", "A place for students and instructors"]
+          facts: ["Education-related learning", "Teaching and study spaces", "A place for students and instructors"],
+          photo: realBuildingPhoto("https://www.uvic.ca/info/_assets/images/content-main/buildings-maclaurin-720x405.jpg", "Exterior of the MacLaurin Building", "Photo: University of Victoria", "https://www.uvic.ca/search/buildings/pages/maclaurin.php")
         },
         {
           level: 5, id: "ecss", name: "Engineering & Computer Science", icon: "💻", left: 37, top: 68, width: 23, height: 18, labelTop: 57,
           answer: "coding",
           clues: clue([7988086, 12899157, 9553905, 6963944, 6424590, 34803966, 102061, 5483075], ["Writing computer code", "Code on a screen", "Programmer at work", "Computer programming", "Code on a laptop", "Debugging code", "Programming workspace", "Typing code on a laptop"]),
           description: "The Engineering and Computer Science building supports learning and research in computing and engineering. Students use its academic spaces to work on programming, systems, design, and engineering projects.",
-          facts: ["Computer science and engineering", "Computing labs and academic spaces", "Programming, design, and projects"]
+          facts: ["Computer science and engineering", "Computing labs and academic spaces", "Programming, design, and projects"],
+          photo: realBuildingPhoto("https://commons.wikimedia.org/wiki/Special:FilePath/UVic_ECS_Building.png?width=900", "Exterior of the Engineering & Computer Science building", "Photo: Thedarkempire · CC BY-SA 4.0", "https://commons.wikimedia.org/wiki/File:UVic_ECS_Building.png")
         },
         {
           level: 6, id: "bob", name: "Bob Wright Centre", icon: "🔬", left: 62, top: 65, width: 28, height: 19, labelTop: 65,
           answer: "science",
           clues: clue([6129892, 15831835, 3735786, 8442282, 9243743, 9243728, 9243745, 8532849], ["Laboratory microscope", "Scientist at work", "Chemistry experiment", "Scientific research", "Scientists experimenting", "Scientists using a microscope", "Laboratory research", "Scientific experiment"]),
           description: "The Bob Wright Centre is part of UVic's science and research environment. It supports learning and research in areas such as physics and astronomy, with spaces used by students, instructors, and researchers.",
-          facts: ["Science and research spaces", "Learning and collaboration", "Connected with UVic's science community"]
+          facts: ["Science and research spaces", "Learning and collaboration", "Connected with UVic's science community"],
+          photo: realBuildingPhoto("https://www.uvic.ca/info/_assets/images/content-main/buildings-bwc-720x405.jpg", "Exterior of the Bob Wright Centre", "Photo: University of Victoria", "https://www.uvic.ca/search/buildings/pages/bob-wright-centre-ocean-earth-and-atmospheric-sciences.php")
         },
         {
           level: 7, id: "jcc", name: "Jamie Cassels Centre", icon: "🎤", left: 40, top: 13, width: 18, height: 16, labelTop: 67,
           answer: "events",
           clues: clue([37805464, 7431367, 19234633, 35120738, 9001997, 38756923, 5192291, 13899690], ["Live performance", "Singer with microphone", "Event crowd", "People celebrating", "Stage ready for a performance", "Live concert", "Audience at a concert", "Crowd at a live event"]),
           description: "The Jamie Cassels Centre is a central campus venue used for a range of university activities and gatherings. Its event spaces help bring students, faculty, and visitors together.",
-          facts: ["Meetings and gatherings", "University events", "A recognizable campus landmark"]
+          facts: ["Meetings and gatherings", "University events", "A recognizable campus landmark"],
+          photo: realBuildingPhoto("assets/buildings/jamie-cassels-centre.jpg", "Exterior of the Jamie Cassels Centre", "Photo: University of Victoria", "https://www.uvic.ca/search/buildings/pages/jamie-cassels-centre.php")
         },
         {
           level: 8, id: "cle", name: "Clearihue Building", icon: "🌎", left: 58, top: 20, width: 18, height: 18, labelTop: 68,
           answer: "language",
           clues: illustratedClues("language", ["Letters and speech", "Languages around the world", "A dictionary", "Letters and alphabets", "A conversation", "A world of languages", "Word definitions", "Writing systems"]),
           description: "Clearihue is associated with humanities teaching at UVic, including language-related learning. Its classrooms and academic spaces support students studying languages, literature, and other humanities subjects.",
-          facts: ["Humanities and language learning", "Classrooms and academic spaces", "Study across cultures and ideas"]
+          facts: ["Humanities and language learning", "Classrooms and academic spaces", "Study across cultures and ideas"],
+          photo: realBuildingPhoto("https://commons.wikimedia.org/wiki/Special:FilePath/UVic_Clearihue_Building.jpg?width=900", "Exterior of the Clearihue Building", "Photo: Thedarkempire · CC BY-SA 4.0", "https://commons.wikimedia.org/wiki/File:UVic_Clearihue_Building.jpg")
         }
       ];
 
@@ -567,12 +576,19 @@
       function pickClues(building, setIndex = 0) {
         // Each building has eight curated photos. Show one set of four at a time.
         const start = setIndex * 4;
-        return shuffled(building.clues.slice(start, start + 4));
+        const set = shuffled(building.clues.slice(start, start + 4));
+        if (building.photo) {
+          // Keep one real-life building photo visible in every clue set.
+          if (set.length >= 4) set[set.length - 1] = building.photo;
+          else set.push(building.photo);
+        }
+        return set;
       }
 
       function startLevel(level) {
         const building = buildings.find(item => item.level === level);
         const highestUnlocked = Math.max(0, ...unlockedLevels);
+        // Free route (playtest upgrade): any building can be played in any order.
         if (!building) {
           console.warn(`U-pic cannot start locked Level ${level}.`);
           return;
@@ -594,7 +610,6 @@
         document.querySelector("#level-badge .level-number").textContent = String(building.level);
         document.getElementById("puzzle-title").textContent = `Level ${building.level}: ${building.name}`;
         showPage("game");
-        document.dispatchEvent(new CustomEvent("upic:puzzlestart", {detail:{building}}));
       }
 
       function updateArrival(building, arrived) {
@@ -608,12 +623,13 @@
           if (doneCount >= buildings.length) {
             eyebrow.textContent = "Campus complete";
             title.textContent = "🎓 Congratulations on completing the map!";
-            copy.textContent = "You unlocked every building on campus. Tap any building to revisit it, replay a level, or try the trivia and hidden treasures.";
+            // playful voice (playtest upgrade)
+            copy.textContent = "You officially know campus better than some upper-year students. Tap any building to revisit it or replay a level.";
           } else {
             const nextLevel = Math.max(0, ...unlockedLevels) + 1;
             eyebrow.textContent = "Your campus adventure";
             title.textContent = doneCount ? `${doneCount} of ${buildings.length} buildings unlocked` : "Ready to explore?";
-            copy.textContent = "Choose any building to explore. Solve the word puzzle, then complete a campus mission.";
+            copy.textContent = `Pick any building to play next${doneCount ? "" : " (Level " + nextLevel + " is a good place to start)"}. Your campus guide will walk there.`;
           }
           playButton.hidden = true;
           detailsButton.hidden = true;
@@ -630,7 +646,7 @@
             ? building.description
             : `🔒 Building information is locked. Solve the ${building.name} picture puzzle to reveal its description and facts.`;
         const nextPlayableLevel = Math.max(0, ...unlockedLevels) + 1;
-        const canPlay = true;
+        const canPlay = true; // free route: every building is playable
         playButton.textContent = unlockedLevels.has(building.level)
           ? `▶  Replay Level ${building.level}`
           : `▶  Play Level ${building.level}`;
@@ -756,6 +772,7 @@
         displayedClues.forEach((clue, index) => {
           const card = document.createElement("div");
           card.className = "clue-card";
+          if (clue.credit) card.classList.add("building-photo-card");
           card.setAttribute("role", "img");
           card.setAttribute("aria-label", clue.caption);
           const photo = document.createElement("img");
@@ -777,22 +794,25 @@
           caption.className = "clue-caption";
           caption.textContent = clue.caption;
           card.appendChild(caption);
+          if (clue.credit) {
+            const credit = document.createElement(clue.source ? "a" : "span");
+            credit.className = "clue-credit";
+            credit.textContent = clue.credit;
+            if (clue.source) {
+              credit.href = clue.source;
+              credit.target = "_blank";
+              credit.rel = "noopener noreferrer";
+            }
+            card.appendChild(credit);
+          }
           grid.appendChild(card);
         });
         renderSlots();
         renderKeyboard();
         updateProgress();
-        if (activeBuilding) document.dispatchEvent(new CustomEvent("upic:cluesrendered", {detail:{building:activeBuilding}}));
       }
 
       function renderSlots() {
-        const filledCount = userLetters.filter(Boolean).length + hintedLetters.filter(Boolean).length;
-        const progress = document.getElementById("puzzle-progress");
-        if (progress && activeBuilding) {
-          progress.textContent = `Letters placed: ${filledCount}/${answer().length}`;
-          progress.setAttribute("aria-valuenow", String(filledCount));
-          progress.setAttribute("aria-valuemax", String(answer().length));
-        }
         slots.innerHTML = "";
         answer().split("").forEach((letter, index) => {
           const button = document.createElement("button");
@@ -924,7 +944,7 @@
         const nextPlayableLevel = Math.max(0, ...unlockedLevels) + 1;
         buildings.forEach(building => {
           const isUnlocked = unlockedLevels.has(building.level);
-          const isPlayable = !isUnlocked;
+          const isPlayable = !isUnlocked; // free route: every locked building is playable
           const button = document.createElement("button");
           button.type = "button";
           const hasExplorationReward = exploredRewardBuildings.has(building.id);
@@ -952,7 +972,7 @@
           label.className = "map-hotspot-label";
           label.textContent = hasExplorationReward
             ? `✓ ${building.name}`
-            : isUnlocked ? building.name : isPlayable ? `🧩 ${building.name}` : `🔒 Level ${building.level}`;
+            : isUnlocked ? building.name : isPlayable ? `▶ Level ${building.level}` : `🔒 Level ${building.level}`;
           button.appendChild(label);
           button.addEventListener("click", () => travelToBuilding(building));
           mapNodes.appendChild(button);
@@ -1085,6 +1105,13 @@
         renderKeyboard();
       }
 
+      // Free route: the next building the player hasn't solved yet, counting on from the current level.
+      function nextUnsolvedBuilding(fromLevel) {
+        const ordered = [...buildings].sort((a, b) => a.level - b.level);
+        return ordered.find(b => b.level > fromLevel && !unlockedLevels.has(b.level))
+          || ordered.find(b => !unlockedLevels.has(b.level))
+          || null;
+      }
       let checkingGuess = false;
       function submitAnswer() {
         if (levelSolved || checkingGuess) return;
@@ -1105,16 +1132,16 @@
           document.dispatchEvent(new CustomEvent("upic:unlock", { detail: { building: activeBuilding } }));
           renderPuzzle();
           renderMap();
-          document.dispatchEvent(new CustomEvent("upic:puzzlesolved", {detail:{building:activeBuilding}}));
           selectedMapBuilding = activeBuilding;
           updateArrival(activeBuilding, true);
           document.getElementById("win-title").textContent = activeBuilding.name;
           document.getElementById("win-copy").textContent = earnedHint
-            ? `Look at you! One less building to get lost in. Level ${activeBuilding.level} is now colourful on your UVic map. You earned 1 bonus hint! You now have ${hints} hint${hints === 1 ? "" : "s"}.`
-            : `Look at you! One less building to get lost in. Level ${activeBuilding.level} is now colourful on your UVic map. Your hint inventory is full (${hints}/3).`;
+            ? `You completed Level ${activeBuilding.level} and unlocked this building on your UVic campus map. You earned 1 bonus hint! You now have ${hints} hint${hints === 1 ? "" : "s"}.`
+            : `You completed Level ${activeBuilding.level} and unlocked this building on your UVic campus map. Your hint inventory is full (${hints}/3).`;
           const nextButton = document.getElementById("win-next-button");
-          nextButton.hidden = unlockedLevels.size === buildings.length;
-          nextButton.textContent = "Return to campus map";
+          const nextUnsolved = nextUnsolvedBuilding(activeBuilding.level);
+          nextButton.hidden = !nextUnsolved;
+          if (nextUnsolved) nextButton.textContent = `Play next: ${nextUnsolved.name}`;
           openModal(winModal);
         } else {
           // Near-miss feedback (playtest finding): show which letters are already in the right spot
@@ -1123,8 +1150,8 @@
           const rightCount = rightSpots.filter(Boolean).length;
           const total = solution.length;
           let message;
-          if (rightCount === 0) message = "Not quite. Even fourth-years get lost sometimes! Try a different word.";
-          else if (rightCount >= Math.ceil(total / 2)) message = `You’re on the right campus trail! ${rightCount} of ${total} letters are correct. Adjust your guess.`;
+          if (rightCount === 0) message = "Not quite. Even fourth-years get lost sometimes! None of those letters are in the right spot, so try a different word.";
+          else if (rightCount >= Math.ceil(total / 2)) message = `So close! ${rightCount} of ${total} letters are in the right spot. Keep the same idea and try again.`;
           else message = `Not quite, but ${rightCount} of ${total} letters ${rightCount === 1 ? "is" : "are"} in the right spot. Try again.`;
           setStatus(message, rightCount >= Math.ceil(total / 2) ? "near" : "error");
           checkingGuess = true;
@@ -1137,9 +1164,7 @@
             checkingGuess = false;
             keyboard.classList.remove("checking");
             if (levelSolved) return;
-            // Keep the guess editable: correct letters remain visible until changed.
-            renderSlots();
-            renderKeyboard();
+            resetEnteredLetters();
           }, 1500);
         }
       }
@@ -1176,6 +1201,29 @@
         document.getElementById("building-modal-icon").textContent = building.icon;
         document.getElementById("building-modal-title").textContent = building.name;
         document.getElementById("building-modal-copy").textContent = building.description;
+        const modalImageWrap = document.getElementById("building-modal-image-wrap");
+        const modalImage = document.getElementById("building-modal-image");
+        const modalCredit = document.getElementById("building-modal-credit");
+        if (building.photo) {
+          modalImageWrap.hidden = false;
+          modalImage.src = building.photo.image;
+          modalImage.alt = building.photo.caption;
+          modalCredit.textContent = building.photo.credit || "";
+          if (building.photo.source) {
+            modalCredit.href = building.photo.source;
+            modalCredit.hidden = false;
+          } else {
+            modalCredit.removeAttribute("href");
+            modalCredit.hidden = !building.photo.credit;
+          }
+        } else {
+          modalImageWrap.hidden = true;
+          modalImage.removeAttribute("src");
+          modalImage.alt = "";
+          modalCredit.textContent = "";
+          modalCredit.hidden = true;
+          modalCredit.removeAttribute("href");
+        }
         const facts = document.getElementById("building-modal-facts");
         facts.replaceChildren(...building.facts.map(fact => {
           const item = document.createElement("li");
@@ -1261,7 +1309,8 @@
       });
       document.getElementById("win-next-button").addEventListener("click", () => {
         closeModal(winModal);
-        showPage("map");
+        const nextUnsolved = nextUnsolvedBuilding(activeBuilding.level);
+        if (nextUnsolved) startLevel(nextUnsolved.level);
       });
       document.getElementById("map-play-button").addEventListener("click", () => {
         if (selectedMapBuilding) startLevel(selectedMapBuilding.level);

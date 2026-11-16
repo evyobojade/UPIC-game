@@ -50,48 +50,15 @@ These are the four additional photos used by the Swap Pictures button in each ro
 - Treasure puzzles now use their matching four illustrated clue cards and visible captions, rather than reusing the main-level photos that did not match the treasure answer.
 
 
-## Grey map, trivia hints and layout fixes (added after playtest)
+## Campus discovery upgrade (added after playtest)
 
-- **Grey map:** the campus starts in greyscale. Each building you unlock blooms back into colour; unlock all 8 and the whole map turns colour with a "Campus complete" celebration and a "Congratulations on completing the map!" message.
-- **Win celebration:** solving a puzzle plays a short fanfare, fires confetti, and shows the unlocked building in the win popup (fits on one screen, no scrolling).
-- **Trivia for hints (top bar, 🧠):** answer a question about a building you've unlocked to earn +1 hint, up to 3 trivia hints per hour. The button shows how many are left, or the minutes until more unlock.
-- **Building panel:** now just Play and Building information, in one slim row so it doesn't cover the map. Hidden treasure is hidden (one mini-game only).
-- **Top bar:** buildings unlocked and hints found moved from the card on the map into the top bar, so nothing covers the campus. The map is larger on laptops, and on phones the map art lines up with the building hotspots.
-- **Swap button** just says "Swap pictures".
-- **Close-guess feedback:** a wrong guess now shows how many letters are in the right spot ("So close! 5 of 7 letters are in the right spot") and highlights them green for a moment before clearing, so good reasoning isn't treated like any other wrong answer (playtest finding).
-- **Map Pieces collection (hidden):** set `SHOW_COLLECTION = true` at the top of `wallet.js` to bring back the collectible map-piece cards.
-- **Files:** `wallet.js` and `wallet.css` (code name "wallet"). `script.js` gained a small `window.UPic` API, three events (`upic:unlock`, `upic:maprender`, `upic:reset`), the swap label and the completion message; `index.html` loads the two new files.
-
-
-## Integrated campus learning loop (November 2026 review build)
-
-Players may choose any of the eight UVic building puzzles in any order. The puzzle interface displays a letter-fill progress indicator and uses encouraging position-aware near-miss feedback without automatically clearing an incorrect guess. The fourth picture clue references the associated real building (exterior photo for the McPherson Library, Clearihue, and ECS levels; illustrated campus map for the five remaining buildings).
-
-On solving a word puzzle, a building becomes coloured on the campus map and a collectible Campus Passport card becomes available. The level-complete screen offers **Find this building**, which opens a three-choice visual map-identification mission. Correct identification earns the building's **discovery stamp** (and a bonus hint when room is available), and presents a building fact. The wrong choice can be retried without penalty. All eight mission stamps are tracked in the browser independently of puzzle unlocks. There is no live GPS or routing.
-
-The existing grey-to-colour map effects, audio settings, confetti, and level data are retained. Six licensed exterior building photos are available in this version; the remaining two buildings use the illustrated map. Photo links require a network connection.
-
-### Exterior photo credits
-
-- [McPherson Library photograph](https://commons.wikimedia.org/wiki/File:UVic_McPherson_Library.jpg), Thedarkempire, CC BY-SA 4.0.
-- [Clearihue Building photograph](https://commons.wikimedia.org/wiki/File:UVic_Clearihue_Building.jpg), Tloren5, CC BY-SA 4.0.
-- [ECS Building photograph](https://commons.wikimedia.org/wiki/File:UVic_ECS_Building.png), Thedarkempire, CC BY-SA 4.0.
-- [David Strong Building photograph](https://commons.wikimedia.org/wiki/File:David_Strong_building_East_side._READ_MORE_IN_PANORAMIO-COMMENT_-_panoramio.jpg), John Newcomb, CC BY 3.0.
-- [Bob Wright Centre photograph](https://commons.wikimedia.org/wiki/File:Bob_Wright_Centre_for_Ocean_Earth_and_Atmosphere_Sciences._READ_INFO_IN_PANORAMIO-COMMENTS_-_panoramio.jpg), John Newcomb, CC BY 3.0.
-- [Jamie Cassels Centre (formerly University Centre) photograph](https://commons.wikimedia.org/wiki/File:University_Centre._READ_MORE_IN_PANORAMIO-COMMENT_-_panoramio.jpg), John Newcomb, CC BY 3.0.
-
-The puzzle includes clickable photo credits leading to licence information.
-
-### Test checklist before final release
-
-1. Start Level 8 before Level 1 and solve one puzzle.
-2. Fill letters, submit a near-miss and change one letter without clearing the others.
-3. Confirm the fourth campus-linked clue also appears after **Swap pictures**.
-4. On success, check celebration, colour reveal, Passport card, and **Find this building**.
-5. Choose a wrong map crop, then the correct map crop. Confirm exactly one discovery stamp and building fact.
-6. Open Passport to confirm its discovery-stamp badge.
-7. Complete additional missions; check progress counts and the final 8/8 congratulation.
-8. Check map layout, audio on/off, and controls on Safari desktop and phone.
-9. Reset map progress and verify Passport and mission progress are cleared.
-
-This branch has passed JavaScript syntax and static event/file checks, but has **not yet been playtested interactively in a browser**.
+- **Grey map:** the campus starts grey; each solved building blooms back into colour. All 8 = "Campus complete" celebration.
+- **Free route:** play buildings in any order. "Play next" in the win popup points to the next unsolved building.
+- **Campus discovery challenge:** after a building unlocks, the map asks where you'd go for something (e.g. "borrow a book") and highlights 3 buildings (A/B/C) to choose from.
+- **Navigation missions:** "Find your next class! You're leaving X and need to reach Y." Tap the destination on the map; a miss gives a compass hint (e.g. "head south-east"), and "Show me" makes the answer glow. Challenges alternate between the two types. First-try answers earn +1 hint.
+- **Campus Passport (📘):** a stamp card for each solved building, plus "📍 Found on map" for buildings found in challenges. Tap a card for building info.
+- **Trivia for hints (🧠, top bar):** up to 3 hints per hour.
+- **Puzzle:** close-guess feedback (letters in the right spot glow green), a "letters placed" counter, and a "Swap pictures" button.
+- **Playful voice:** "Even fourth-years get lost sometimes", "One less building to get lost in", and more.
+- **Layout:** counters in the top bar so nothing covers the map; bigger map; slim building panel (Play + Building info); win popup fits without scrolling.
+- **Files:** `wallet.js`/`wallet.css` (rewards, passport, layout), `discovery.js` (challenges + missions). `script.js` has a small `window.UPic` API and events (`upic:unlock`, `upic:maprender`, `upic:reset`).

@@ -5,9 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#123d70">
   <title>U-pic — A UVic campus word game</title>
-  <link rel="stylesheet" href="style.css?v=campus-learning-1">
-  <link rel="stylesheet" href="wallet.css?v=campus-learning-1">
-  <link rel="stylesheet" href="campus-learning.css?v=campus-learning-1">
+  <link rel="stylesheet" href="style.css?v=final-2">
+  <link rel="stylesheet" href="wallet.css?v=final-2">
 </head>
 <body>
   <div class="app">
@@ -76,7 +75,6 @@
             </span>
           </div>
           <h1 id="puzzle-title" class="sr-only">Level 1</h1>
-          <p class="puzzle-progress" id="puzzle-progress" role="progressbar" aria-label="Letters placed" aria-valuemin="0" aria-valuemax="7" aria-valuenow="0">Letters placed: 0/7</p>
           <div id="clue-grid" class="clue-grid" aria-label="Four picture clues"></div>
           <div id="letter-slots" class="letter-slots" role="group" aria-label="Answer letters"></div>
           <p id="slot-help" class="slot-help">Tap a filled slot to undo it. Need help? Use a hint or swap the pictures.</p>
@@ -133,7 +131,7 @@
               <div>
                 <p class="eyebrow" id="map-arrival-eyebrow">Your campus adventure</p>
                 <h2 id="map-arrival-title">Ready to explore?</h2>
-                <p id="map-arrival-copy">Choose any building to explore the map. You can visit locked buildings for discovery rewards, and choose any building puzzle to solve.</p>
+                <p id="map-arrival-copy">Choose any building to explore the map. You can visit locked buildings for discovery rewards, but only the next available level can be played.</p>
               </div>
               <div class="map-arrival-actions">
                 <button class="button gold" type="button" id="map-play-button" hidden>▶ &nbsp;Play Level 1</button>
@@ -195,6 +193,10 @@
     <div class="modal-card">
       <button class="modal-close" type="button" aria-label="Close building details">×</button>
       <div class="modal-icon" id="building-modal-icon" aria-hidden="true">📚</div>
+      <div id="building-modal-image-wrap" class="building-modal-image-wrap" hidden>
+        <img id="building-modal-image" class="building-modal-image" alt="">
+        <a id="building-modal-credit" class="building-modal-credit" target="_blank" rel="noopener noreferrer" hidden></a>
+      </div>
       <p class="eyebrow" id="building-modal-label" style="justify-content:center; margin-bottom:10px">Building details</p>
       <h2 id="building-modal-title">McPherson Library</h2>
       <p id="building-modal-copy">A welcoming place to read, research, study, and discover something new. Your first campus landmark is now on the map!</p>
@@ -252,8 +254,8 @@
     </div>
   </div>
 
-  <script src="script.js?v=campus-learning-1" defer></script>
-  <script src="wallet.js?v=campus-learning-1" defer></script>
-  <script src="campus-learning.js?v=campus-learning-1" defer></script>
+  <script src="script.js?v=final-2" defer></script>
+  <script src="wallet.js?v=final-2" defer></script>
+  <script src="discovery.js?v=final-2" defer></script>
 </body>
 </html>

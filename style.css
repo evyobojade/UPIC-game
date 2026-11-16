@@ -1742,3 +1742,35 @@ body.modal-open { overflow: hidden; }
   }
   #map-page .map-legend-icon { width: 9px !important; height: 9px !important; flex-basis: 9px !important; }
 }
+
+
+/* Real-life building photos */
+.building-photo-card { outline: 2px solid rgba(234, 185, 67, 0.45); }
+.clue-credit {
+  display:block;
+  margin-top:6px;
+  font-size:11px;
+  color:#5f6f86;
+  text-decoration:none;
+}
+.clue-credit:hover { text-decoration:underline; }
+.building-modal-image-wrap {
+  margin: 8px auto 14px;
+  text-align: center;
+}
+.building-modal-image {
+  width: 100%;
+  max-height: 220px;
+  object-fit: cover;
+  border-radius: 16px;
+  display: block;
+  box-shadow: 0 8px 24px rgba(17, 39, 69, 0.12);
+}
+.building-modal-credit {
+  display:inline-block;
+  margin-top:8px;
+  font-size:12px;
+  color:#5f6f86;
+  text-decoration:none;
+}
+.building-modal-credit:hover { text-decoration: underline; }
