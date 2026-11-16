@@ -782,6 +782,7 @@
         renderSlots();
         renderKeyboard();
         updateProgress();
+        if (activeBuilding) document.dispatchEvent(new CustomEvent("upic:cluesrendered", {detail:{building:activeBuilding}}));
       }
 
       function renderSlots() {
