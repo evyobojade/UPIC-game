@@ -100,6 +100,7 @@
         const earnedHint=newStamp && api.addHint();
         feedback.textContent="🎉 Campus discovered! "+b.name+" added to your Passport. "+(earnedHint?"You earned +1 hint!":newStamp?"New discovery stamp earned!":"You've already earned this stamp.")+" "+completed.length+"/8 missions complete.";
         count.textContent=completed.length+"/8 discovery stamps earned";
+        feedback.textContent += (b.facts && b.facts[0] ? " Campus fact: "+b.facts[0]+".":"")+(completed.length===8 ? " 🎓 Congratulations! You now know campus better than some upper-year students!" : "");
         document.dispatchEvent(new CustomEvent("upic:missioncomplete",{detail:{building:b,count:completed.length}}));
       });
       options.appendChild(pick);
@@ -116,14 +117,13 @@
   modal.querySelector(".mission-done").addEventListener("click",closeMission);
   modal.addEventListener("click",e=>{if(e.target===modal)closeMission();});
   document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!modal.hidden)closeMission();});
+  document.addEventListener("upic:puzzlestart",({detail})=>{ active=detail.building; button.hidden=true; });
   document.addEventListener("upic:puzzlesolved",({detail})=>{
     active=detail.building;
     button.hidden=false;
     button.textContent=completed.includes(active.id)?"🧭 Replay building mission":"🧭 Find this building";
   });
-  document.addEventListener("upic:puzzlestart",({detail})=>{
-    button.hidden=true;
-    active=detail.building;
+  document.addEventListener("upic:cluesrendered",({detail})=>{
     const card=document.querySelector("#clue-grid .clue-card:last-child");
     if(!card)return;
     const b=detail.building;
